@@ -1,1 +1,232 @@
+@font-face {
+    font-family: Bakedspot-Regular;
+    src: url('../fonts/glacial-indifference.regular.otf');
+}
+
+@font-face {
+    font-family: Bakedspot-Bold;
+    src: url('../fonts/glacial-indifference.bold.otf');
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    font-family: 'Bakedspot-Bold';
+    font-size: 70px !important;
+}
+
+p{
+    font-family: 'Bakedspot-Regular';
+}
+
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10 !important;
+    background-color: transparent;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+.navbar.scrolled {
+    background-color: #ffc0cb; /* Pink background on scroll */
+}
+
+
+.offcanvas-title{
+    font-size: 35px;
+    text-decoration: none;
+    color: #000;
+}
+
+.offcanvas-title:hover{
+    color: #fda2bc !important;
+    transition: 0.01s !important;
+}
+
+
+.fa-bars{
+    font-size: 25px;
+}
+
+li{
+    font-family: 'Bakedspot-Bold';
+    font-size: 45px;
+}
+
+li:hover{
+    color: #fda2bc;
+    transition: 0.01s;
+}
+
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 28px;
+    color: #000;
+}
+
+@media (max-width: 767px) {  /* Adjust breakpoint if needed */
+    .navbar-brand img {
+        width: 120px;  /* Change this value for smaller or larger size */
+    }
+}
+
+.btn-order {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-radius: 30px !important;
+    border: #000 !important;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn-main {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-radius: 30px !important;
+    border: #000 !important;
+    transition: opacity 0.3s ease-in-out;
+}
+
+
+
+.btn-order.show {
+    opacity: 1;
+}
+
+
+.button-text{
+    font-size: 15px;
+}
+
+.btn-order:hover {
+    background-color: #333;
+}
+
+.offcanvas-title {
+    font-weight: bold;
+}
+
+
+.sidebar-toggler{
+    background-color: transparent;
+    border: none;
+}
+
+
+/* Home */
+.home{
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.video-section {
+    position: relative;
+    height: 100vh;  /* Full screen height */
+    width: 100%;
+    overflow: hidden;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.overlay-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+/* Content section styling */
+.content-section {
+    background-color: #fff;  /* Optional: to differentiate sections */
+    z-index: 3;
+    position: relative;
+}
+
+
+
+.mainheading{
+    font-size: 100px !important;
+}
+
+@media (max-width: 767px) {  /* Adjust breakpoint if needed */
+    .mainheading{
+        font-size: 40px !important;
+    }
+
+    .secondaryheading{
+        font-size: 60px;
+    }
+}
+
+.cookie-image {
+    position: absolute;
+    left: -10px;            /* Controls horizontal stick-out */
+    bottom: -180px;          /* Moves the image down a bit */
+    z-index: 2;             /* Keeps the image above the container */
+    transform: translateY(20px);  /* Adjusts vertical overlap smoothly */
+}
+
+.content-section .container {
+    overflow: visible;      /* Allows the image to pop out naturally */
+}
+
+.home-brownie-container {
+    border-radius: 30px;
+    overflow: visible;
+    transition: background-color 0.3s ease-in-out !important;
+}
+
+.home-brownie-container h1,
+.home-brownie-container p,
+.home-brownie-container .btn {
+    color: #000 !important;  /* Initial text color for headings, paragraphs, and buttons */
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;  /* Smooth transition for text and background color */
+}
+
+.home-brownie-container .btn {
+    border-color: #000;  /* Initial border color for outline button */
+}
+
+.home-brownie-container .btn.btn-light {
+    background-color: #fff;  /* Initial background for 'Order Now' button */
+}
+
+.home-brownie-container:hover {
+    background-color: #693b22;
+}
+
+.home-brownie-container:hover h1,
+.home-brownie-container:hover p,
+.home-brownie-container:hover .btn{
+    color: #fff !important;  /* Change text color to white on hover */
+}
+
+.home-brownie-container:hover .btn-light {
+    border-color: #fff !important;
+    color: #000 !important;  /* Change border color to white on hover */
+}
+
+.home-brownie-container:hover .btn {
+    border-color: #fff !important;
+}
+
+
+
 
