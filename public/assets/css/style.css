@@ -161,7 +161,7 @@ li:hover{
 
 
 
-.mainheading{
+.secondaryheading{
     font-size: 100px !important;
 }
 
@@ -228,23 +228,30 @@ li:hover{
 }
 
 
- @media (max-width: 768px) {
-        .cookie-image {
-            width: 70%;
-            left: 30px;
-            bottom: -10px;
-            z-index: 2;
-            transform: translateY(20px);
-            display: block;
-            margin: 0 auto;  /* Centers the image horizontally */
-        }
+@media (max-width: 768px) {
+    .cookie-image {
+        width: 50%;
+        position: absolute; /* Ensure positioning works */
+        left: 50%;
+        bottom: -80px;
+        z-index: 2;
+        transform: translateX(-50%) translateY(20px); /* Center the image horizontally */
+        display: block;
+    }
 
-        h1{
-            font-size: 32px !important;
-        }
+    .product-heading {
+        font-size: 32px !important;
+    }
 
+    .secondaryheading{
+        font-size: 64px !important;
+        text-align: center;
+        line-height: 50px;
+        padding-top: 30px;
 
     }
+}
+
 
 
 
