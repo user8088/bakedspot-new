@@ -223,6 +223,10 @@ li:hover{
     color: #000 !important;  /* Change border color to white on hover */
 }
 
+.footer-logo{
+    width: 500px;
+}
+
 .home-brownie-container:hover .btn {
     border-color: #fff !important;
 }
@@ -249,6 +253,10 @@ li:hover{
         line-height: 50px;
         padding-top: 30px;
 
+    }
+
+    .footer-logo{
+        width: 300px;
     }
 }
 
