@@ -10,7 +10,7 @@
         </button>
 
         <!-- Logo in the Center -->
-        <a class="navbar-brand mx-auto" href="#"><img src="{{asset('images/logo.png')}}" width="200" alt=""></a>
+        <a class="navbar-brand mx-auto" href="#"><img src="{{asset('images/logo.png')}}" width="180" alt=""></a>
 
         <!-- Order Now Button on the Right -->
         <a href="#" class="btn btn-order py-3 px-3">

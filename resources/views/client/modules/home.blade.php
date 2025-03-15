@@ -39,7 +39,7 @@
         <div class="container home-brownie-container  position-relative mt-5 pt-5">
             <a href="" style="text-decoration: none;">
                 <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
-                    <div class="col-lg-6 ps-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white">
+                    <div class="col-lg-6 ps-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white order-2 order-md-1">
                         <h1 class="fw-bold">Semi-Sweet Chocolate Chunk</h1>
                         <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
                         <div>
@@ -47,7 +47,7 @@
                             <button class="btn btn-light">Order Now</button>
                         </div>
                     </div>
-                    <div class="col-lg-6 d-flex justify-content-center position-relative">
+                    <div class="col-lg-6 d-flex justify-content-center position-relative order-1 order-md-2">
                         <img src="{{ asset('images/dummy-product.png') }}" class="img-fluid cookie-image" alt="">
                     </div>
                 </div>
@@ -73,7 +73,7 @@
         <div class="container home-brownie-container  position-relative mt-5 pt-5">
             <a href="" style="text-decoration: none;">
                 <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
-                    <div class="col-lg-6 ps-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white">
+                    <div class="col-lg-6 ps-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white order-2 order-md-1">
                         <h1 class="fw-bold">Semi-Sweet Chocolate Chunk</h1>
                         <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
                         <div>
@@ -81,7 +81,7 @@
                             <button class="btn btn-light">Order Now</button>
                         </div>
                     </div>
-                    <div class="col-lg-6 d-flex justify-content-center position-relative">
+                    <div class="col-lg-6 d-flex justify-content-center position-relative order-1 order-md-2">
                         <img src="{{ asset('images/dummy-product.png') }}" class="img-fluid cookie-image" alt="">
                     </div>
                 </div>
@@ -105,7 +105,6 @@
             </a>
         </div>
     </div>
-
 </section>
 
 
