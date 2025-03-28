@@ -5,7 +5,6 @@
             aria-controls="offcanvasExample">
             <div class="d-flex align-items-center">
                 <i class="fas fa-bars me-2"></i>
-                <span class="fw-bold button-text">Menu</span>
             </div>
         </button>
 

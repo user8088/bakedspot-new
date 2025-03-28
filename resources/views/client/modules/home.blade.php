@@ -1,7 +1,6 @@
 @extends('client.layouts.main')
 @section('page')
-
-{{-- Full-Screen Video Section --}}
+    {{-- Full-Screen Video Section --}}
 <section class="video-section">
     <video autoplay muted loop playsinline class="hero-video">
         <source src="https://cdn.pixabay.com/video/2021/11/18/98283-647561752_large.mp4" type="video/mp4">
@@ -16,7 +15,7 @@
 </section>
 
 {{-- Products Section (or any other section) --}}
-<section class="content-section position-relative">
+<section class="content-section position-relative d-none d-md-block">
     <div class="container">
         <h1 class="secondaryheading ">Our Yummers</h1>
         <div class="container home-brownie-container  position-relative mt-5 pt-5  mb-5">
@@ -107,7 +106,56 @@
     </div>
 </section>
 
+{{-- Mobile Section --}}
+<section class="content-section-mobile d-block d-md-none">
+    <div class="container pb-4">
+        <h1 class="secondaryheading-mobile pt-3">Our Yummers</h1>
+        <div class="row g-2 pt-4">
+            <div class="col-6">
+                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-6">
+                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
+                <p>Learn More</p>
+            </div>
+        </div>
+        <div class="row g-2 pt-4">
+            <div class="col-6">
+                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
+                <p>Learn More</p>
+            </div>
+            <div class="col-6">
+                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
+            </div>
+        </div>
+        <div class="row g-2 pt-4">
+            <div class="col-6">
+                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-6">
+                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
+                <p>Learn More</p>
+            </div>
+        </div>
+        <div class="row g-2 pt-4">
+            <div class="col-6">
+                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
+                <p>Learn More</p>
+            </div>
+            <div class="col-6">
+                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
+            </div>
+        </div>
+        <div class="row g-2 pt-4">
+            <div class="col-6">
+                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
+            </div>
+            <div class="col-6">
+                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
+                <p>Learn More</p>
+            </div>
+        </div>
+    </div>
 
-
-
+</section>
 @endsection
