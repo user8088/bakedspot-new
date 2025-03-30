@@ -111,13 +111,13 @@
             </div>
             <div class="col-6">
                 <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <p>Learn More</p>
+                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
             </div>
         </div>
         <div class="row g-2 pt-4">
             <div class="col-6">
                 <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <p>Learn More</p>
+                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
             </div>
             <div class="col-6">
                 <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
@@ -129,13 +129,13 @@
             </div>
             <div class="col-6">
                 <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <p>Learn More</p>
+                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
             </div>
         </div>
         <div class="row g-2 pt-4">
             <div class="col-6">
                 <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <p>Learn More</p>
+                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
             </div>
             <div class="col-6">
                 <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
@@ -147,7 +147,7 @@
             </div>
             <div class="col-6">
                 <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <p>Learn More</p>
+                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
             </div>
         </div>
     </div>
