@@ -15,12 +15,12 @@
                 <div class="row ps-5">
                     @php
                         $flavors = [
-                            ['name' => 'Red Velvet Brownie', 'calories' => 690, 'image' => 'dummy-product.png'],
-                            ['name' => 'Triple Chocolate Brownie', 'calories' => 880, 'image' => 'dummy-product.png'],
-                            ['name' => 'Cookie Dough Brownie', 'calories' => 770, 'image' => 'dummy-product.png'],
-                            ['name' => 'Peanut Butter Brownie', 'calories' => 880, 'image' => 'dummy-product.png'],
-                            ['name' => 'Lemon Cheese Cake Brownie', 'calories' => 660, 'image' => 'dummy-product.png'],
-                            ['name' => 'Classic Brownie', 'calories' => 910, 'image' => 'dummy-product.png'],
+                            ['name' => 'Red Velvet Brownie', 'calories' => 690,'price' => 250, 'image' => 'dummy-product.png'],
+                            ['name' => 'Triple Chocolate Brownie', 'calories' => 880,'price' => 250, 'image' => 'dummy-product-1.png'],
+                            ['name' => 'Cookie Dough Brownie', 'calories' => 770, 'price' => 250,'image' => 'dummy-product.png'],
+                            ['name' => 'Peanut Butter Brownie', 'calories' => 880,'price' => 250, 'image' => 'dummy-product.png'],
+                            ['name' => 'Lemon Cheese Cake Brownie', 'calories' => 660,'price' => 250, 'image' => 'dummy-product.png'],
+                            ['name' => 'Classic Brownie', 'calories' => 910,'price' => 250, 'image' => 'dummy-product.png'],
                         ];
                     @endphp
 
