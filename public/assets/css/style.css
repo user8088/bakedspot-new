@@ -116,6 +116,7 @@ li:hover{
     border: #000 !important;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
+    font-family: 'Bakedspot-Bold' !important;
 }
 
 .btn-main {
