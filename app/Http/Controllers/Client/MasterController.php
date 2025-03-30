@@ -11,4 +11,13 @@ class MasterController extends Controller
     {
         return view('client.modules.product-details-page');
     }
+
+    public function get_PackMenuPage()
+    {
+        return view('client.modules.packs-page');
+    }
+
+    public function get_PackFourPage(){
+        return view('client.modules.pack-four-page');
+    }
 }

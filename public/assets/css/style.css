@@ -18,6 +18,9 @@ body, html {
     box-sizing: border-box;
 }
 
+.heading-black-small{
+    font-size: 30px !important;
+}
 
 a{
     text-decoration: none !important;
@@ -344,7 +347,17 @@ li:hover{
     object-fit: cover; /* Ensures the image fits well */
 }
 
+.pack-background{
+    background-color: #ffc0cb;
+    height: 100vh;
+    border-radius: 30px;
+}
 
+.container-box{
+    background-image: url('../images/empty.png');
+    background-size: cover;
+    background-position: center;
+}
 
 @media (max-width: 768px) {
     .cookie-image {

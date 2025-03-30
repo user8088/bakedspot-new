@@ -26,8 +26,8 @@
     </div>
     <div class="offcanvas-body">
         <ul class="list-unstyled">
-            <li class="py-2"><a class="nav-link" href="#">Home</a></li>
-            <li class="py-2"><a class="nav-link" href="#">Order</a></li>
+            <li class="py-2"><a class="nav-link" href="/">Home</a></li>
+            <li class="py-2"><a class="nav-link" href="{{route('get-packmenupage')}}">Order</a></li>
             <li class="py-2"><a class="nav-link" href="#">Brownies</a></li>
             <li class="py-2"><a class="nav-link" href="#">Catering</a></li>
             <li class="py-2"><a class="nav-link" href="#">Packaging</a></li>

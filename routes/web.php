@@ -10,4 +10,8 @@ Route::get('/', function () {
 
 Route::controller(MasterController::class)->group(function () {
     Route::get('/product-details', 'get_ProductDetailsPage')->name('get-productdetailspage');
+    Route::get('/pack-menu', 'get_PackMenuPage')->name('get-packmenupage');
+    Route::get('/pack-menu/pack-4', 'get_PackFourPage')->name('get-packfourpage');
+
+
 });
