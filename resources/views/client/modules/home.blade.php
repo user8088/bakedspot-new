@@ -8,7 +8,7 @@
     </video>
     <div class="overlay-content">
         <h1 class="heroheading" style="color: white;">Best brownies in town.</h1>
-        <a href="#" class="btn btn-main py-3 px-3">
+        <a href="{{route('get-packmenupage')}}" class="btn btn-main py-3 px-3">
             <span class="fw-bold button-text">Order Now</span>
         </a>
     </div>
@@ -28,7 +28,7 @@
                     <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
                     <div>
                         <a href="{{route('get-productdetailspage')}}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="#" class="btn btn-light">Order Now</a>
+                        <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
                     </div>
                 </div>
             </div>
@@ -41,7 +41,7 @@
                     <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
                     <div>
                         <a href="{{ route('get-productdetailspage') }}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="#" class="btn btn-light">Order Now</a>
+                        <a href="{{route('get-packmenupage')}}"class="btn btn-light">Order Now</a>
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex justify-content-center position-relative order-1 order-md-2">
@@ -60,7 +60,7 @@
                     <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
                     <div>
                         <a href="{{route('get-productdetailspage')}}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="#" class="btn btn-light">Order Now</a>
+                        <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                         <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
                         <div>
                             <button class="btn btn-outline-light me-2">Learn More</button>
-                            <button class="btn btn-light">Order Now</button>
+                            <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
                         </div>
                     </div>
                     <div class="col-lg-6 d-flex justify-content-center position-relative order-1 order-md-2">
@@ -93,7 +93,7 @@
                     <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
                     <div>
                         <a href="{{route('get-productdetailspage')}}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="#" class="btn btn-light">Order Now</a>
+                        <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
                     </div>
                 </div>
             </div>

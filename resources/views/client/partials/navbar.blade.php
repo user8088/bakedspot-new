@@ -12,7 +12,7 @@
         <a class="navbar-brand mx-auto" href="#"><img src="{{asset('images/logo.png')}}" width="180" alt=""></a>
 
         <!-- Order Now Button on the Right -->
-        <a href="#" class="btn btn-order py-3 px-3">
+        <a href="{{route('get-packmenupage')}}" class="btn btn-order py-3 px-3">
             <span class="fw-bold button-text">Order Now</span>
         </a>
     </div>
