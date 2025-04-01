@@ -20,4 +20,8 @@ class MasterController extends Controller
     public function get_PackFourPage(){
         return view('client.modules.pack-four-page');
     }
+
+    public function get_PackEightPage(){
+        return view('client.modules.pack-eight-page');
+    }
 }

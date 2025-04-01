@@ -153,4 +153,6 @@
     </div>
 
 </section>
+@include('client.partials.footer')
+
 @endsection

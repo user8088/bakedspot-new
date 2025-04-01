@@ -1,17 +1,17 @@
 @extends('client.layouts.main')
 @section('page')
-<section class="pack4">
-    <div class="container pt-0 pt-md-5 pb-0 pb-md-5">
+<section class="pack8">
+    <div class="container pt-5 pb-5">
         <div class="row">
             <!-- Pink Container -->
             <div class="col-lg-6 pack-background position-relative">
-                <div class="container-box" id="selected-items-container">
+                <div class="container-box-eight" id="selected-items-container">
                     <!-- Selected images will appear here -->
                 </div>
             </div>
             <!-- Selection Panel -->
             <div class="col-lg-6">
-                <h1 class="heading-black-small pb-3 pt-3 ps-0 ps-md-5">Select 4 Flavors</h1>
+                <h1 class="heading-black-small pb-3 pt-3 ps-0 ps-md-5">Select 8 Flavors</h1>
                 <div class="row ps-0 ps-md-5">
                     @php
                         $flavors = [
@@ -42,7 +42,7 @@
                     @endforeach
                 </div>
                 <div class="text-end text-md-end text-center sticky-bottom pb-3">
-                    <a class="btn btn-order show mt-3 p-3 disabled" href="#" id="add-to-bag">Add 4 More - PKR 0.00</a>
+                    <a class="btn btn-order show mt-3 p-3 disabled" href="#" id="add-to-bag">Add 8 More - PKR 0.00</a>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
     let totalSelected = 0;
 
     function updateButton() {
-        let remaining = 4 - totalSelected;
+        let remaining = 8 - totalSelected;
         if (remaining === 0) {
             addToBagButton.innerText = `Add to Bag - PKR ${totalPrice.toFixed(2)}`;
             addToBagButton.classList.remove('disabled');
@@ -76,7 +76,7 @@
             const quantitySpan = document.querySelector(`.quantity[data-name="${name}"]`);
             let quantity = parseInt(quantitySpan.innerText);
 
-            if (quantity < 4 && totalSelected < 4) {
+            if (quantity < 8 && totalSelected < 8) {
                 quantity++;
                 quantitySpan.innerText = quantity;
                 totalSelected++;
