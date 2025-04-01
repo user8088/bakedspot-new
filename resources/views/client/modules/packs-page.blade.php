@@ -14,7 +14,7 @@
                         <p class="card-text">PKR 1000</p>
                     </div>
                 </div>
-            </a>
+                </a>
             </div>
             <!-- Second Card -->
             <div class="col-md-6">
@@ -34,6 +34,7 @@
     <div class="container py-4 d-block d-md-none">
         <h1 class="heading-black-smaller">Brownie Packs</h1>
         <!-- First Row -->
+        <a style="color: #000" href="{{route('get-packfourpage')}}">
         <div class="row pt-3 pb-3 border-bottom">
             <div class="col-6 col-sm-6">
                 <img src="{{asset('images/pk-4.png')}}" class="img-fluid" alt="Delicious Dessert">
@@ -43,7 +44,9 @@
                 <p >PKR 1000</p>
             </div>
         </div>
+        </a>
         <!-- Second Row -->
+        <a style="color: #000" href="{{route('get-packeightpage')}}">
         <div class="row pt-3 pb-3 border-bottom">
             <div class="col-6 col-sm-6">
                 <img src="{{asset('images/pk-4.png')}}" class="img-fluid" alt="Delicious Dessert">
@@ -53,6 +56,7 @@
                 <p >PKR 2000</p>
             </div>
         </div>
+        </a>
     </div>
 
 </section>
