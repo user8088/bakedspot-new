@@ -52,7 +52,7 @@
                 <img src="{{asset('images/pk-4.png')}}" class="img-fluid" alt="Delicious Dessert">
             </div>
             <div class="col-6 col-sm-6 pt-3">
-                <h1 class="heading-black-smaller" >Pack of 4</h1>
+                <h1 class="heading-black-smaller" >Pack of 8</h1>
                 <p >PKR 2000</p>
             </div>
         </div>

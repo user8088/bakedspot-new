@@ -57,11 +57,46 @@
                     @endforeach
                 </div>
 
-
                 <!-- Theme Color Code -->
                 <div class="mb-3">
                     <label for="theme_color" class="form-label">Theme Color Code</label>
                     <input type="text" class="form-control" id="theme_color" name="theme_color" value="{{ old('theme_color', $product->theme_color) }}">
+                </div>
+
+                <!-- Image Uploads -->
+                <h1 class="heading-black-small pb-5 pt-5">Edit Product Images</h1>
+
+                <!-- Home Image -->
+                <div class="mb-3">
+                    <label for="home_image" class="form-label">Home Image</label>
+                    @if ($product->image && $product->image->home_image_url)
+                        <div>
+                            <img src="{{ asset('storage/' . $product->image->home_image_url) }}" alt="Home Image" width="100">
+                        </div>
+                    @endif
+                    <input type="file" class="form-control" id="home_image" name="home_image">
+                </div>
+
+                <!-- Detail Image -->
+                <div class="mb-3">
+                    <label for="detail_image" class="form-label">Detail Image</label>
+                    @if ($product->image && $product->image->detail_image_url)
+                        <div>
+                            <img src="{{ asset('storage/' . $product->image->detail_image_url) }}" alt="Detail Image" width="100">
+                        </div>
+                    @endif
+                    <input type="file" class="form-control" id="detail_image" name="detail_image">
+                </div>
+
+                <!-- Pack Image -->
+                <div class="mb-3">
+                    <label for="pack_image" class="form-label">Pack Image</label>
+                    @if ($product->image && $product->image->pack_image_url)
+                        <div>
+                            <img src="{{ asset('storage/' . $product->image->pack_image_url) }}" alt="Pack Image" width="100">
+                        </div>
+                    @endif
+                    <input type="file" class="form-control" id="pack_image" name="pack_image">
                 </div>
 
                 <!-- Submit Button -->

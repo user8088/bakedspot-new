@@ -11,7 +11,6 @@ class MasterController extends Controller
     public function getHomePage()
 {
     $products = Product::all();
-    // dd($products->first()->toArray());
     return view('client.modules.home', compact('products'));
 }
 
@@ -22,10 +21,12 @@ class MasterController extends Controller
     }
 
     public function get_PackFourPage(){
-        return view('client.modules.pack-four-page');
+        $products = Product::all();
+        return view('client.modules.pack-four-page', compact('products'));
     }
 
     public function get_PackEightPage(){
-        return view('client.modules.pack-eight-page');
+        $products = Product::all();
+        return view('client.modules.pack-eight-page', compact('products'));
     }
 }

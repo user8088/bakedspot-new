@@ -8,7 +8,7 @@
     </video>
     <div class="overlay-content">
         <h1 class="heroheading" style="color: white;">Best brownies in town.</h1>
-        <a href="{{route('get-packmenupage')}}" class="btn btn-main py-3 px-3">
+        <a href="{{route('start-order')}}" class="btn btn-main py-3 px-3">
             <span class="fw-bold button-text">Order Now</span>
         </a>
     </div>

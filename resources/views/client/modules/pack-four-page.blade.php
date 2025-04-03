@@ -1,4 +1,5 @@
 @extends('client.layouts.main')
+
 @section('page')
 <section class="pack4">
     <div class="container pt-0 pt-md-5 pb-0 pb-md-5">
@@ -13,30 +14,30 @@
             <div class="col-lg-6">
                 <h1 class="heading-black-small pb-3 pt-3 ps-0 ps-md-5">Select 4 Flavors</h1>
                 <div class="row ps-0 ps-md-5">
-                    @php
-                        $flavors = [
-                            ['name' => 'Red Velvet Brownie', 'calories' => 690,'price' => 250, 'image' => 'dummy-product-1.png'],
-                            ['name' => 'Triple Chocolate Brownie', 'calories' => 880,'price' => 250, 'image' => 'dummy-product-2.png'],
-                            ['name' => 'Cookie Dough Brownie', 'calories' => 770, 'price' => 250,'image' => 'dummy-product.png'],
-                            ['name' => 'Peanut Butter Brownie', 'calories' => 880,'price' => 250, 'image' => 'dummy-product.png'],
-                            ['name' => 'Lemon Cheese Cake Brownie', 'calories' => 660,'price' => 250, 'image' => 'dummy-product.png'],
-                            ['name' => 'Classic Brownie', 'calories' => 910,'price' => 250, 'image' => 'dummy-product.png'],
-                        ];
-                    @endphp
-
-                    @foreach ($flavors as $flavor)
+                    @foreach ($products as $product)
                         <div class="d-flex align-items-center justify-content-between border-bottom my-2">
                             <div class="d-flex align-items-center">
-                                <img src="{{ asset('images/' . $flavor['image']) }}" class="flavor-img me-3" width="50">
+                                <!-- Check if image exists -->
+                                @if ($product->image && $product->image->pack_image_url)
+                                    <img src="{{ asset('storage/' . $product->image->pack_image_url) }}" class="flavor-img me-3" width="50">
+                                @else
+                                    <img src="{{ asset('images/default-image.png') }}" class="flavor-img me-3" width="50"> <!-- fallback image -->
+                                @endif
                                 <div>
-                                    <strong>{{ $flavor['name'] }}</strong><br>
-                                    <span>{{ $flavor['calories'] }} cal</span>
+                                    <strong>{{ $product->name }}</strong><br>
+                                    <span>PKR. {{ $product->price }}</span>
                                 </div>
                             </div>
                             <div class="counter d-flex align-items-center">
-                                <button class="btn btn-sm btn-outline-dark decrease" data-name="{{ $flavor['name'] }}" data-price="{{ $flavor['price'] }}" data-image="{{ asset('images/' . $flavor['image']) }}">-</button>
-                                <span class="mx-2 quantity" data-name="{{ $flavor['name'] }}">0</span>
-                                <button class="btn btn-sm btn-outline-dark increase" data-name="{{ $flavor['name'] }}" data-price="{{ $flavor['price'] }}" data-image="{{ asset('images/' . $flavor['image']) }}">+</button>
+                                <button class="btn btn-sm btn-outline-dark decrease" data-name="{{ $product->name }}" data-price="{{ $product->price }}"
+                                    data-image="{{ $product->image && $product->image->pack_image_url ? asset('storage/' . $product->image->pack_image_url) : asset('images/default-image.png') }}">
+                                    -
+                                </button>
+                                <span class="mx-2 quantity" data-name="{{ $product->name }}">0</span>
+                                <button class="btn btn-sm btn-outline-dark increase" data-name="{{ $product->name }}" data-price="{{ $product->price }}"
+                                    data-image="{{ $product->image && $product->image->pack_image_url ? asset('storage/' . $product->image->pack_image_url) : asset('images/default-image.png') }}">
+                                    +
+                                </button>
                             </div>
                         </div>
                     @endforeach
@@ -48,7 +49,6 @@
         </div>
     </div>
 </section>
-
 
 <script>
    document.addEventListener('DOMContentLoaded', function () {
