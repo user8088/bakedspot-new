@@ -67,7 +67,7 @@
                 <!-- Layout for even-indexed products -->
                 <div class="row g-2 pt-4">
                     <div class="col-6">
-                        <img src="{{ asset('assets/images/dummy-product-1.png') }}" class="img-fluid" alt="">
+                        <img src="{{ asset('images/dummy-product-1.png') }}" class="img-fluid" alt="">
                     </div>
                     <div class="col-6">
                         <h1 class="mobile-product-heading pt-3">{{ $product->name }}</h1>
