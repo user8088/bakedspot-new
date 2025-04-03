@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg p-3 sticky-top" >
+<nav class="navbar mainnavbar navbar-expand-lg p-3 sticky-top" >
     <div class="container d-flex justify-content-between align-items-center">
         <!-- Offcanvas Toggler -->
         <button class="sidebar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
@@ -9,10 +9,11 @@
         </button>
 
         <!-- Logo in the Center -->
-        <a class="navbar-brand mx-auto" href="#"><img src="{{asset('images/logo.png')}}" width="180" alt=""></a>
-
+        <a class="navbar-brand mx-lg-0 mx-auto" href="/">
+            <img src="{{ asset('images/logo.png') }}" width="180" alt="">
+        </a>
         <!-- Order Now Button on the Right -->
-        <a href="{{route('get-packmenupage')}}" class="btn btn-order py-3 px-3">
+        <a href="{{route('get-packmenupage')}}" class="btn btn-order py-2 px-3">
             <span class="fw-bold button-text">Order Now</span>
         </a>
     </div>

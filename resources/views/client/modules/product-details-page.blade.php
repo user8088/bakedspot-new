@@ -1,7 +1,7 @@
 @extends('client.layouts.main')
 @section('page')
 
-<section class="wavy-product pb-5">
+<section class="wavy-product pb-5" style=" background-color: {{$product->theme_color}}">
     <svg class="wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
         <path fill="white" fill-opacity="1" d="M0,192L48,202.7C96,213,192,235,288,229.3C384,224,480,192,576,186.7C672,181,768,203,864,218.7C960,235,1056,245,1152,240C1248,235,1344,213,1392,202.7L1440,192V320H0Z"></path>
     </svg>
@@ -10,9 +10,9 @@
             <div class="row align-items-center">
                 <!-- Text Column (First on Mobile, Second on Desktop) -->
                 <div class="col-lg-6 order-1 order-lg-2 d-flex flex-column">
-                    <h1 class="heading-white">Semi-Sweet Chocolate Chunk</h1>
+                    <h1 class="heading-white">{{$product->name}}</h1>
                     <p class="text-basic text-justify">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Id animi quibusdam dolorum, deserunt, ipsam obcaecati facilis illum alias exercitationem harum eaque nemo blanditiis accusantium placeat veniam non reiciendis quis! Temporibus!
+                       {{$product->description}}
                     </p>
                     <div class="mb-3 mb-md-0">
                         <a class="btn btn-order-white btn-lg mt-3">Order Now</a>
@@ -90,7 +90,7 @@
     <div class="container py-5">
         <h1 class="heading-black">Made from scratch with fresh ingredients every day</h1>
         <p class="text-muted">
-            A symphony of flour, sugar, butter, eggs, and chocolate, come together for our deliciously large gourmet desserts.
+            {{$product->ingredients_tagline}}
         </p>
         <div class="ingredient-container d-flex gap-3 mt-3">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8kV97bZqcmruiQkY9WIj1292qZTSh-dbO9g&s" class="ingredient-img" alt="Flour">
@@ -131,16 +131,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr><td>Calories</td><td class="text-end">1200 cal</td></tr>
-                                    <tr><td>Fat</td><td class="text-end">67 g</td></tr>
-                                    <tr><td>Saturated Fat</td><td class="text-end">40 g</td></tr>
-                                    <tr><td>Trans Fat</td><td class="text-end">0 g</td></tr>
-                                    <tr><td>Cholesterol</td><td class="text-end">194 mg</td></tr>
-                                    <tr><td>Sodium</td><td class="text-end">734 mg</td></tr>
-                                    <tr><td>Carbohydrates</td><td class="text-end">147 g</td></tr>
-                                    <tr><td>Dietary Fiber</td><td class="text-end">7 g</td></tr>
-                                    <tr><td>Sugars</td><td class="text-end">113 g</td></tr>
-                                    <tr><td>Protein</td><td class="text-end">7 g</td></tr>
+                                    <tr><td>Calories</td><td class="text-end">{{$product->nutrition->calories}}</td></tr>
+                                    <tr><td>Fat</td><td class="text-end">{{$product->nutrition->fat}}</td></tr>
+                                    <tr><td>Sodium</td><td class="text-end">{{$product->nutrition->sodium}}</td></tr>
+                                    <tr><td>Carbohydrates</td><td class="text-end">{{$product->nutrition->carbohydrates}}<td><tr>
+                                    <tr><td>Protien</td><td class="text-end">{{$product->nutrition->protein}}</td><tr>
+                                    <tr><td>Sugar</td><td class="text-end">{{$product->nutrition->sugar}}</td></tr>
+                                    <tr><td>Dietary Fiber</td><td class="text-end">{{$product->nutrition->fiber}}</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -158,7 +155,7 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#nutritionAllergensAccordion">
                     <div class="accordion-body">
-                        Allergy details go here...
+                       {{$product->allergy_info}}
                     </div>
                 </div>
             </div>

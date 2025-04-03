@@ -18,30 +18,34 @@
 <section class="content-section position-relative d-none d-md-block">
     <div class="container">
         <h1 class="secondaryheading pt-5 pb-5">Our Yummers</h1>
-        <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5">
-            <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
-                <div class="col-lg-6 d-flex justify-content-center position-relative">
-                    <img src="{{ asset('images/dummy-product.png') }}" class="img-fluid cookie-image" alt="">
-                </div>
-                <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white">
-                    <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">Semi-Sweet Chocolate Chunk</h1>
-                    <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
-                    <div>
-                        <a href="{{route('get-productdetailspage')}}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
+        @foreach ($products as $product)
+    @if($loop->index % 2 == 0)
+        <!-- Layout for even-indexed products -->
+        <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5" data-bg-color="{{ $product->theme_color }}">
+                <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
+                    <div class="col-lg-6 d-flex justify-content-center position-relative">
+                        <img src="{{ asset('images/dummy-product-1.png') }}" class="img-fluid cookie-image" alt="">
                     </div>
-                </div>
+                    <div class="col-lg-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white">
+                        <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">{{$product->name}}</h1>
+                        <p>{{$product->description}}</p>
+                        <div>
+                            <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2">Learn More</a>
+                            <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
+                        </div>
+                    </div>
             </div>
         </div>
-
-        <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5">
+    @else
+        <!-- Layout for odd-indexed products (switches order of image and text) -->
+        <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5" data-bg-color="{{ $product->theme_color }}">
             <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
                 <div class="col-lg-6 ps-0 ps-md-5 ps-lg-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white order-2 order-md-1">
-                    <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">Semi-Sweet Chocolate Chunk</h1>
-                    <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
+                    <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">{{$product->name}}</h1>
+                    <p>{{$product->description}}</p>
                     <div>
-                        <a href="{{ route('get-productdetailspage') }}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="{{route('get-packmenupage')}}"class="btn btn-light">Order Now</a>
+                        <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2">Learn More</a>
+                        <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex justify-content-center position-relative order-1 order-md-2">
@@ -49,55 +53,8 @@
                 </div>
             </div>
         </div>
-
-        <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5">
-            <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
-                <div class="col-lg-6 d-flex justify-content-center position-relative">
-                    <img src="{{ asset('images/dummy-product.png') }}" class="img-fluid cookie-image" alt="">
-                </div>
-                <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white">
-                    <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">Semi-Sweet Chocolate Chunk</h1>
-                    <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
-                    <div>
-                        <a href="{{route('get-productdetailspage')}}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="container home-brownie-container  position-relative mt-5 pt-5 mb-5">
-            <a href="" style="text-decoration: none;">
-                <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
-                    <div class="col-lg-6 ps-0 ps-md-5 ps-lg-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white order-2 order-md-1">
-                        <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">Semi-Sweet Chocolate Chunk</h1>
-                        <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
-                        <div>
-                            <button class="btn btn-outline-light me-2">Learn More</button>
-                            <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 d-flex justify-content-center position-relative order-1 order-md-2">
-                        <img src="{{ asset('images/dummy-product.png') }}" class="img-fluid cookie-image" alt="">
-                    </div>
-                </div>
-            </a>
-        </div>
-        <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5">
-            <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
-                <div class="col-lg-6 d-flex justify-content-center position-relative">
-                    <img src="{{ asset('images/dummy-product.png') }}" class="img-fluid cookie-image" alt="">
-                </div>
-                <div class="col-lg-6 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white">
-                    <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">Semi-Sweet Chocolate Chunk</h1>
-                    <p>Chocolate chip, but make it chunky—a delicious cookie filled with irresistible semi-sweet chocolate chunks and a sprinkle of flaky sea salt.</p>
-                    <div>
-                        <a href="{{route('get-productdetailspage')}}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+    @endif
+@endforeach
     </div>
 </section>
 
@@ -105,54 +62,58 @@
 <section class="content-section-mobile d-block d-md-none">
     <div class="container pb-4">
         <h1 class="secondaryheading-mobile pt-3">Our Yummers</h1>
-        <div class="row g-2 pt-4">
-            <div class="col-6">
-                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
-            </div>
-            <div class="col-6">
-                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
-            </div>
-        </div>
-        <div class="row g-2 pt-4">
-            <div class="col-6">
-                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
-            </div>
-            <div class="col-6">
-                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
-            </div>
-        </div>
-        <div class="row g-2 pt-4">
-            <div class="col-6">
-                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
-            </div>
-            <div class="col-6">
-                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
-            </div>
-        </div>
-        <div class="row g-2 pt-4">
-            <div class="col-6">
-                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
-            </div>
-            <div class="col-6">
-                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
-            </div>
-        </div>
-        <div class="row g-2 pt-4">
-            <div class="col-6">
-                <img src="{{asset('images/Chocolatebrownie.jpg')}}" class="img-fluid" alt="">
-            </div>
-            <div class="col-6">
-                <h1 class="mobile-product-heading pt-3">Semi-Sweet Chocolate Chunk</h1>
-                <a style="color: #000" href="{{route('get-productdetailspage')}}">Learn More</a>
-            </div>
-        </div>
+        @foreach ($products as $product)
+            @if($loop->index % 2 == 0)
+                <!-- Layout for even-indexed products -->
+                <div class="row g-2 pt-4">
+                    <div class="col-6">
+                        <img src="{{ asset('assets/images/dummy-product-1.png') }}" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-6">
+                        <h1 class="mobile-product-heading pt-3">{{ $product->name }}</h1>
+                        <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2" style="color: #000">Learn More</a>
+                    </div>
+                </div>
+            @else
+                <!-- Layout for odd-indexed products (switches order of image and text) -->
+                <div class="row g-2 pt-4">
+                    <div class="col-6">
+                        <h1 class="mobile-product-heading pt-3">{{ $product->name }}</h1>
+                        <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2" style="color: #000">Learn More</a>
+                    </div>
+                    <div class="col-6">
+                        <img src="{{ asset('images/Chocolatebrownie.jpg') }}" class="img-fluid" alt="">
+                    </div>
+                </div>
+            @endif
+        @endforeach
     </div>
-
 </section>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select all product containers
+        const containers = document.querySelectorAll('.home-brownie-container');
+
+        containers.forEach(container => {
+            // Get the background color from the data attribute
+            const bgColor = container.getAttribute('data-bg-color');
+
+            // Set the initial background color (optional)
+            container.style.backgroundColor = '#fff'; // Or any default color
+
+            // Add hover effect using JavaScript
+            container.addEventListener('mouseenter', function() {
+                container.style.backgroundColor = bgColor;  // Set the dynamic hover color
+            });
+
+            container.addEventListener('mouseleave', function() {
+                container.style.backgroundColor = '#fff';  // Reset to default color
+            });
+        });
+    });
+</script>
+
+
 @include('client.partials.footer')
 
 @endsection

@@ -55,7 +55,7 @@ p{
     font-size: 40px !important;
 }
 
-.navbar {
+.mainnavbar {
     position: absolute;
     top: 0;
     left: 0;
@@ -68,7 +68,7 @@ p{
 }
 
 
-.navbar.scrolled {
+.mainnavbar.scrolled {
     background-color: #FFB9CD; /* Pink background on scroll */
 }
 
@@ -236,6 +236,7 @@ li:hover{
 
 .home-brownie-container {
     border-radius: 30px;
+    height: 55vh;
     overflow: visible;
     transition: background-color 0.3s ease-in-out !important;
 }
@@ -255,9 +256,10 @@ li:hover{
     background-color: #fff;  /* Initial background for 'Order Now' button */
 }
 
-.home-brownie-container:hover {
+
+/* .home-brownie-container:hover {
     background-color: #693b22;
-}
+} */
 
 .home-brownie-container:hover h1,
 .home-brownie-container:hover p,
@@ -279,11 +281,10 @@ li:hover{
 }
 
 .wavy-product {
-    background-color: #5B3A2E; /* Your brown background */
+    /* Your brown background */
     position: relative;
     overflow: hidden;
     height: 110vh;
-
   }
 
   .wave {
@@ -409,6 +410,366 @@ li:hover{
     object-fit: cover;
     transition: all 0.3s ease-in-out;
 }
+
+.dashboard-login{
+    background-color: #FFB9CD;
+}
+
+.admin-signin{
+    background-color: #fff;
+    border-radius: 15px;
+}
+
+.form-control{
+    border-color: #000 !important;
+}
+
+.light-text{
+    color: #9c9c9c !important;
+    line-height: 1rem !important;
+}
+
+.admin-signin-img{
+    background-image: url('../images/admin-login-img.png');
+    background-size: cover;
+    background-position: center;
+}
+
+/* MAIN CONTENT CSS */
+.dashboard-wrapper {
+    background: #fda2bc;
+    height: 350px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .dashboard-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    z-index: 2;
+    font-family: 'Poppins', 'Arial', sans-serif;
+    color: black;
+
+  }
+
+  .content {
+    padding: 20px;
+    overflow-y: auto;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+  }
+
+  .content::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Webkit browsers */
+  }
+
+
+  .small-text-mobile {
+    font-size: smaller !important;
+  }
+
+  .light-text {
+    font-weight: 400;
+    color: #535353;
+  }
+
+  .small-text {
+    font-size: small;
+  }
+
+  /* NAVBAR & SIDEBAR CSS */
+  .navbar-brand {
+    font-size: small;
+    color: white !important;
+  }
+
+  .sidebar {
+    background-color: #fff;
+    color: #000;
+    height: 100%;
+    padding: 20px;
+    border-radius: 20px;
+    overflow-y: auto;
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;
+  }
+
+  .content::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Webkit browsers */
+  }
+
+  .sidebar .nav-link {
+    color: #000;
+    margin: 10px 0;
+  }
+
+  .sidebar .nav-link.active {
+    background-color: #E0E0E0;
+    border-radius: 10px;
+  }
+
+  .sidebar .nav-link i {
+    margin-right: 10px;
+  }
+
+  .sidebar .section-title {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  .sidebar-mobile {
+    position: fixed;
+    top: 70;
+    width: 200px;
+    background-color: white;
+    z-index: 100;
+    box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    color: #000;
+    height: 70vh;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-y: auto;
+  }
+
+  .sidebar-mobile .nav-link {
+    color: #000;
+    margin: 10px 0;
+    font-size: small;
+  }
+
+  .sidebar-mobile .nav-link.active {
+    background-color: #E0E0E0;
+    border-radius: 10px;
+  }
+
+  .sidebar-mobile .nav-link i {
+    margin-right: 10px;
+  }
+
+  .sidebar-mobile .section-title {
+    margin-top: 20px;
+    font-weight: bold;
+  }
+
+  /* ICONS CSS */
+  .fa-power-off {
+    color: white;
+  }
+
+  .fa-bell {
+    color: white;
+  }
+
+  .fa-bars {
+    color: #000 !important;
+  }
+
+  /* CARDS & INNER CONTAINERS CSS */
+  .card {
+    border-radius: 20px;
+    background-color: #fff;
+    color: #000;
+    margin-bottom: 20px;
+  }
+
+  .card-header {
+    background-color: transparent;
+    border-bottom: none;
+  }
+
+  .card-body {
+    padding: 20px;
+  }
+
+  .stats-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    color: #6B6B6B;
+    margin-bottom: 20px;
+    height: 100%;
+  }
+
+  .stats-card .icon {
+    font-size: 2rem;
+  }
+
+  .addproject-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    color: #6B6B6B;
+    margin-bottom: 20px;
+  }
+
+  .chart-card {
+    padding: 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    color: #000;
+    margin-bottom: 20px;
+  }
+
+  .carousel-item img {
+    border-radius: 20px;
+  }
+
+  .requests-card {
+    border-radius: 20px;
+    background-image: url('images/meeting-bg.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .meeting-requests .request-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+
+  .meeting-requests {
+    background-color: transparent;
+  }
+
+  .meeting-requests .request-item .details {
+    display: flex;
+    align-items: center;
+  }
+
+  .meeting-requests .request-item h6 {
+    font-size: 14px;
+  }
+
+  .meeting-requests .request-item p {
+    font-size: 13px;
+  }
+
+  .meeting-requests .request-item .details img {
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .meeting-requests .request-item .actions button {
+    margin-left: 10px;
+  }
+
+  .meetings-today {
+    border-radius: 20px;
+    color: #000;
+  }
+
+  .sticky-submit {
+    position: sticky;
+    bottom: 20px;
+    background: white;
+    padding: 10px;
+    text-align: center;
+    z-index: 1000;
+    border-top: 1px solid #ddd; /* Optional: Add a subtle border */
+}
+
+
+
+  .glassy {
+    backdrop-filter: blur(5px) saturate(100%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.329);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.068);
+  }
+
+  .details-link {
+    color: #683ACC !important;
+  }
+
+  .purple-btn {
+    background-color: #683ACC;
+    border: #683ACC;
+  }
+
+  .purple-btn:hover {
+    background-color: #4a2992;
+    border: #683ACC;
+  }
+
+  .purple-btn-boundary {
+    background-color: white !important;
+    color: #4a2992 !important;
+    border-color: #683ACC !important;
+  }
+
+  .purple-btn-boundary:hover {
+    background-color: #683ACC !important;
+    color: white !important;
+    border: #683ACC !important;
+  }
+
+  .btn-project {
+    background-color: white;
+    border-color: black !important;
+    color: black;
+    border-radius: 20px;
+  }
+
+  .piechart {
+    border-radius: 20px;
+  }
+
+  .btn-project:hover {
+    background-color: rgb(66, 66, 66);
+    border-color: black !important;
+    color: white;
+  }
+
+  .projects-column {
+    background-image: url('images/bg-projects.png');
+    background-position: center;
+    background-size: cover;
+    border-radius: 20px;
+  }
+
+  .panes:hover{
+    background-color: #000;
+    transition: 0.4s;
+    color: white;
+    font-weight: bolder !important;
+  }
+
+  .holder{
+    border-radius: 20px;
+  }
+
+  /* MEDIA QUERIES  */
+  @media (max-width: 768px) {
+    .sidebar {
+      height: auto;
+      padding: 10px;
+    }
+
+    .stats-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .meetings-today {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
 
 
 @media (max-width: 768px) {

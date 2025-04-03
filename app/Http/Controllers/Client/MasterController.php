@@ -3,14 +3,18 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class MasterController extends Controller
 {
-    public function get_ProductDetailsPage()
-    {
-        return view('client.modules.product-details-page');
-    }
+    public function getHomePage()
+{
+    $products = Product::all();
+    // dd($products->first()->toArray());
+    return view('client.modules.home', compact('products'));
+}
+
 
     public function get_PackMenuPage()
     {
