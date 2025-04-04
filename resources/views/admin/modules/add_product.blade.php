@@ -55,7 +55,7 @@
                     @foreach(['calories', 'fat', 'carbohydrates', 'protein', 'sugar', 'fiber', 'sodium'] as $nutrient)
                         <div class="col-md-4 mb-3">
                             <label for="{{ $nutrient }}" class="form-label">{{ ucfirst($nutrient) }}</label>
-                            <input type="number" class="form-control" id="{{ $nutrient }}" name="{{ $nutrient }} "
+                            <input type="number" class="form-control" id="{{ $nutrient }}" name="{{ $nutrient }}"
                                 value="{{ old($nutrient) }}">
                         </div>
                     @endforeach
