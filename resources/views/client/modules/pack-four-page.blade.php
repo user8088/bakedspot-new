@@ -18,7 +18,7 @@
                         <div class="d-flex align-items-center justify-content-between border-bottom my-2">
                             <div class="d-flex align-items-center">
                                 @if ($product->images->isNotEmpty() && $product->images->first()->pack_image_url)
-                                    <img src="{{ asset('storage/' . $product->images->first()->pack_image_url) }}" class="flavor-img me-3" width="50">
+                                    <img src="{{ asset('./storage/' . $product->images->first()->pack_image_url) }}" class="flavor-img me-3" width="50">
                                 @else
                                     <img src="{{ asset('images/default-image.png') }}" class="flavor-img me-3" width="50">
                                 @endif
