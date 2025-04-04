@@ -42,7 +42,7 @@
             <img src="{{ asset('icons/vendor-managment-icon.png') }}" width="24" height="24" alt="Vendors">
             <p class="small m-0">Sectors</p>
         </a>
-        <a href="#" class="nav-link text-center">
+        <a href="{{route('logout-admin')}}" class="nav-link text-center">
             <img src="{{ asset('icons/vendor-managment-icon.png') }}" width="24" height="24" alt="Vendors">
             <p class="small m-0">Logout</p>
         </a>
