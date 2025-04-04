@@ -38,12 +38,6 @@
                     <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
                 </div>
 
-                <!-- Allergy Information -->
-                <div class="mb-3">
-                    <label for="allergy_info" class="form-label">Allergy Information</label>
-                    <textarea class="form-control" id="allergy_info" name="allergy_info">{{ old('allergy_info') }}</textarea>
-                </div>
-
                 <div class="mb-3">
                     <label for="price" class="form-label">Price (PKR)</label>
                     <input type="number" class="form-control" id="price" name="price" value="{{ old('price') }}" step="0.01" required>
@@ -51,6 +45,12 @@
 
                 <!-- Nutritional Details -->
                 <h1 class="heading-black-small pb-5 pt-5">Nutritional Details</h1>
+
+                <div class="mb-3">
+                    <label for="allergy_info" class="form-label">Ingredients Tagline</label>
+                    <textarea class="form-control" id="ingredients_tagline" name="ingredients_tagline">{{ old('ingredients_tagline') }}</textarea>
+                </div>
+
                 <div class="row">
                     @foreach(['calories', 'fat', 'carbohydrates', 'protein', 'sugar', 'fiber', 'sodium'] as $nutrient)
                         <div class="col-md-4 mb-3">
@@ -59,6 +59,11 @@
                                 value="{{ old($nutrient) }}">
                         </div>
                     @endforeach
+                </div>
+                <!-- Allergy Information -->
+                <div class="mb-3">
+                    <label for="allergy_info" class="form-label">Allergy Information</label>
+                    <textarea class="form-control" id="allergy_info" name="allergy_info">{{ old('allergy_info') }}</textarea>
                 </div>
 
                 <!-- Theme Color Code -->

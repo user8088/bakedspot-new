@@ -14,6 +14,8 @@ class Product extends Model
         'description',
         'price',
         'heading',
+        'allergy_info',
+        'ingredients_tagline',
         'theme_color'
     ];
 

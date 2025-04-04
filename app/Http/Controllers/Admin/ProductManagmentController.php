@@ -40,7 +40,7 @@ class ProductManagmentController extends Controller
             'fiber' => 'nullable|numeric',
             'sodium' => 'nullable|numeric',
             'theme_color' => 'nullable|string',
-            'ingredients' => 'nullable|string',
+            'ingredients_tagline' => 'nullable|string',
             'ingredient_images' => 'nullable|array|max:5',
             'ingredient_images.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
             'home_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
@@ -55,7 +55,7 @@ class ProductManagmentController extends Controller
             'description' => $request->description,
             'allergy_info' => $request->allergy_info,
             'theme_color' => $request->theme_color,
-            'ingredients_tagline' => $request->ingredients,
+            'ingredients_tagline' => $request->ingredients_tagline,
         ]);
 
         // ✅ Update Nutrition Data
@@ -131,7 +131,8 @@ class ProductManagmentController extends Controller
             'heading' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'allergy_info' => 'nullable|string',
-            'price' => 'required|numeric|min:0', // ✅ Validate price
+            'ingredients_tagline'=> 'nullable|string',
+            'price' => 'required|numeric|min:0',
             'calories' => 'nullable|numeric',
             'fat' => 'nullable|numeric',
             'carbohydrates' => 'nullable|numeric',
@@ -145,6 +146,8 @@ class ProductManagmentController extends Controller
             'pack_image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
 
+        // dd($request->all());
+
         try {
             // Create a new product
             $product = Product::create([
@@ -154,6 +157,7 @@ class ProductManagmentController extends Controller
                 'allergy_info' => $request->allergy_info,
                 'price' => $request->price, // ✅ Add price
                 'theme_color' => $request->theme_color,
+                'ingredients_tagline'=> $request->ingredients_tagline
             ]);
 
             // Create a related nutrition entry

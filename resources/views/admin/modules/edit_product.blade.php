@@ -22,7 +22,6 @@
             <form action="{{ route('edit-product', $product->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-
                 <!-- Product Information -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Product Name</label>
@@ -39,14 +38,13 @@
                     <textarea class="form-control" id="description" name="description">{{ old('description', $product->description) }}</textarea>
                 </div>
 
-                <!-- Allergy Information -->
-                <div class="mb-3">
-                    <label for="allergy_info" class="form-label">Allergy Information</label>
-                    <textarea class="form-control" id="allergy_info" name="allergy_info">{{ old('allergy_info', $product->allergy_info) }}</textarea>
-                </div>
-
                 <!-- Nutritional Details -->
                 <h1 class="heading-black-small pb-5 pt-5">Edit Nutritional Details</h1>
+                <!-- Allergy Information -->
+                <div class="mb-3">
+                    <label for="allergy_info" class="form-label">Ingredients Tagline</label>
+                    <textarea class="form-control" id="ingredients_tagline" name="ingredients_tagline">{{ old('ingredients_tagline', $product->ingredients_tagline) }}</textarea>
+                </div>
                 <div class="row">
                     @foreach(['calories', 'fat', 'carbohydrates', 'protein', 'sugar', 'fiber', 'sodium'] as $nutrient)
                         <div class="col-md-4 mb-3">
@@ -55,6 +53,12 @@
                                 value="{{ old($nutrient, optional($product->nutrition)->$nutrient) }}">
                         </div>
                     @endforeach
+                </div>
+
+                <!-- Allergy Information -->
+                <div class="mb-3">
+                    <label for="allergy_info" class="form-label">Allergy Information</label>
+                    <textarea class="form-control" id="allergy_info" name="allergy_info">{{ old('allergy_info', $product->allergy_info) }}</textarea>
                 </div>
 
                 <!-- Theme Color Code -->
