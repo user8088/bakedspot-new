@@ -4,34 +4,40 @@
     <div class="row">
         <div class="col-md-4">
             <div class="stats-card shadow">
-                <div>
-                    <h6>Total Orders</h6>
-                    <h2>80</h2>
-                </div>
-                <div class="icon">
-                    <img alt="Logo" width="50" src="{{asset("icons/order-icon.png")}}" />
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stats-card shadow">
-                <div>
-                    <h6>Sold Today</h6>
-                    <h2>17</h2>
-                </div>
-                <div class="icon">
-                    <img alt="Logo" width="50" src="{{asset("icons/sold-icon.png")}}" />
+                <div class="row">
+                    <div class="col-10 col-lg-10 col-md-10">
+                        <h6>Orders Today</h6>
+                        <h2>80</h2>
+                    </div>
+                    <div class="col-2 col-lg-2 col-md-2 d-flex justify-content-center align-items-center">
+                        <img alt="Logo" width="50" src="{{asset("icons/order-icon.png")}}" />
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
             <div class="stats-card shadow">
-                <div>
-                    <h6>User Count</h6>
-                    <h2>8</h2>
+                <div class="row">
+                    <div class="col-10 col-lg-10 col-md-10">
+                        <h6>Total Sales</h6>
+                        <h2>80</h2>
+                    </div>
+                    <div class="col-2 col-lg-2 col-md-2 d-flex justify-content-center align-items-center">
+                        <img alt="Logo" width="50" src="{{asset("icons/sold-icon.png")}}" />
+                    </div>
                 </div>
-                <div class="icon">
-                    <img alt="Logo" width="50" src="{{asset("icons/user-icon.png")}}" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card shadow">
+                <div class="row">
+                    <div class="col-10 col-lg-10 col-md-10">
+                        <h6>Total Users</h6>
+                        <h2>80</h2>
+                    </div>
+                    <div class="col-2 col-lg-2 col-md-2 d-flex justify-content-center align-items-center">
+                        <img alt="Logo" width="50" src="{{asset("icons/user-icon.png")}}" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,15 +46,15 @@
 
     <div class="container pt-5" >
         <div class="row justify-content-center">
-            <div class="col-lg-6 ">
+            <div class="col-lg-6 mb-5">
                 <div class="shadow" id="table-1" style="border-radius: 20px;" ></div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 mb-5">
                 <div class="shadow" id="table-2" style="border-radius: 20px;"></div>
             </div>
         </div>
     </div>
-
+</div>
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script>

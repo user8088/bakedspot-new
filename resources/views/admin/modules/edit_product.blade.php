@@ -63,7 +63,7 @@
                     <input type="text" class="form-control" id="theme_color" name="theme_color" value="{{ old('theme_color', $product->theme_color) }}">
                 </div>
 
-                <!-- Image Uploads -->
+                {{-- <!-- Image Uploads -->
                 <h1 class="heading-black-small pb-5 pt-5">Edit Product Images</h1>
 
                 <!-- Home Image -->
@@ -97,7 +97,7 @@
                         </div>
                     @endif
                     <input type="file" class="form-control" id="pack_image" name="pack_image">
-                </div>
+                </div> --}}
 
                 <!-- Submit Button -->
                 <div class="mb-3 ">

@@ -17,11 +17,10 @@
                     @foreach ($products as $product)
                         <div class="d-flex align-items-center justify-content-between border-bottom my-2">
                             <div class="d-flex align-items-center">
-                                <!-- Check if image exists -->
-                                @if ($product->image && $product->image->pack_image_url)
-                                    <img src="{{ asset('storage/' . $product->image->pack_image_url) }}" class="flavor-img me-3" width="50">
+                                @if ($product->images->isNotEmpty() && $product->images->first()->pack_image_url)
+                                    <img src="{{ asset('storage/' . $product->images->first()->pack_image_url) }}" class="flavor-img me-3" width="50">
                                 @else
-                                    <img src="{{ asset('images/default-image.png') }}" class="flavor-img me-3" width="50"> <!-- fallback image -->
+                                    <img src="{{ asset('images/default-image.png') }}" class="flavor-img me-3" width="50">
                                 @endif
                                 <div>
                                     <strong>{{ $product->name }}</strong><br>
@@ -29,15 +28,9 @@
                                 </div>
                             </div>
                             <div class="counter d-flex align-items-center">
-                                <button class="btn btn-sm btn-outline-dark decrease" data-name="{{ $product->name }}" data-price="{{ $product->price }}"
-                                    data-image="{{ $product->image && $product->image->pack_image_url ? asset('storage/' . $product->image->pack_image_url) : asset('images/default-image.png') }}">
-                                    -
-                                </button>
+                                <button class="btn btn-sm btn-outline-dark decrease" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-image="{{ $product->images->isNotEmpty() && $product->images->first()->pack_image_url ? asset('storage/' . $product->images->first()->pack_image_url) : asset('images/default-image.png') }}">-</button>
                                 <span class="mx-2 quantity" data-name="{{ $product->name }}">0</span>
-                                <button class="btn btn-sm btn-outline-dark increase" data-name="{{ $product->name }}" data-price="{{ $product->price }}"
-                                    data-image="{{ $product->image && $product->image->pack_image_url ? asset('storage/' . $product->image->pack_image_url) : asset('images/default-image.png') }}">
-                                    +
-                                </button>
+                                <button class="btn btn-sm btn-outline-dark increase" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-image="{{ $product->images->isNotEmpty() && $product->images->first()->pack_image_url ? asset('storage/' . $product->images->first()->pack_image_url) : asset('images/default-image.png') }}">+</button>
                             </div>
                         </div>
                     @endforeach

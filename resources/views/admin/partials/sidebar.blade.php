@@ -26,25 +26,25 @@
 <!-- BOTTOM MOBILE NAVBAR -->
 <div class="d-block d-lg-none fixed-bottom bg-white shadow-lg py-2" id="mobile-navbar">
     <div class="container d-flex justify-content-around">
-        <a href="#" class="nav-link text-center">
-            <img src="{{ asset('images/dashboard-icon.png') }}" width="24" height="24" alt="Dashboard">
-            <p class="small m-0">Dashboard</p>
+        <a href="{{route('get-homepage')}}" class="nav-link text-center">
+            <img src="{{ asset('icons/dashboard-icon.png') }}" width="24" height="24" alt="Dashboard">
+            <p class="small m-0">Home</p>
+        </a>
+        <a href="{{route('get-productmanagmentpage')}}" class="nav-link text-center">
+            <img src="{{ asset('icons/user-managment-icon.png') }}" width="24" height="24" alt="Users">
+            <p class="small m-0">Products</p>
         </a>
         <a href="#" class="nav-link text-center">
-            <img src="{{ asset('images/user-managment-icon.png') }}" width="24" height="24" alt="Users">
-            <p class="small m-0">Users</p>
+            <img src="{{ asset('icons/stock-managment-icon.png') }}" width="24" height="24" alt="Stock">
+            <p class="small m-0">Orders</p>
         </a>
         <a href="#" class="nav-link text-center">
-            <img src="{{ asset('images/stock-managment-icon.png') }}" width="24" height="24" alt="Stock">
-            <p class="small m-0">Stock</p>
+            <img src="{{ asset('icons/vendor-managment-icon.png') }}" width="24" height="24" alt="Vendors">
+            <p class="small m-0">Sectors</p>
         </a>
         <a href="#" class="nav-link text-center">
-            <img src="{{ asset('images/vendor-managment-icon.png') }}" width="24" height="24" alt="Vendors">
-            <p class="small m-0">Vendors</p>
-        </a>
-        <a href="#" class="nav-link text-center">
-            <img src="{{ asset('images/admin-user-icon.png') }}" width="24" height="24" alt="Admin">
-            <p class="small m-0">Admins</p>
+            <img src="{{ asset('icons/vendor-managment-icon.png') }}" width="24" height="24" alt="Vendors">
+            <p class="small m-0">Logout</p>
         </a>
     </div>
 </div>
