@@ -15,7 +15,7 @@
                        {{$product->description}}
                     </p>
                     <div class="mb-3 mb-md-0">
-                        <a class="btn btn-order-white btn-lg mt-3">Order Now</a>
+                        <a href="{{route('start-order')}}"  class="btn btn-order-white btn-lg mt-3">Order Now</a>
                         <a class="btn btn-order-white-outlined btn-lg mt-3">Add To Favorites</a>
                     </div>
                     <div class="d-flex align-items-center gap-2 text-white mt-3 d-none d-md-block">

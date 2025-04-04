@@ -10,12 +10,16 @@
                 </div>
             @endif
 
-            @if (session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li style="font-size: 12px;">{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
+
 
             <h1 class="heading-black-small pb-5 pt-5">Add New Product</h1>
 
@@ -77,17 +81,17 @@
 
                 <div class="mb-3">
                     <label for="home_image" class="form-label">Home Image</label>
-                    <input type="file" class="form-control" id="home_image" name="home_image">
+                    <input type="file" class="form-control" id="home_image_url" name="home_image_url">
                 </div>
 
                 <div class="mb-3">
                     <label for="detail_image" class="form-label">Detail Image</label>
-                    <input type="file" class="form-control" id="detail_image" name="detail_image">
+                    <input type="file" class="form-control" id="detail_image_url" name="detail_image_url">
                 </div>
 
                 <div class="mb-3">
                     <label for="pack_image" class="form-label">Pack Image</label>
-                    <input type="file" class="form-control" id="pack_image" name="pack_image">
+                    <input type="file" class="form-control" id="pack_image_url" name="pack_image_url">
                 </div>
 
                 <!-- Submit Button -->

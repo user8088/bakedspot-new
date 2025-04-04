@@ -20,10 +20,12 @@ class MasterController extends Controller
         return view('client.modules.packs-page');
     }
 
-    public function get_PackFourPage(){
-        $products = Product::all();
+    public function get_PackFourPage()
+    {
+        $products = Product::with('images')->get(); // 👈 eager load 'images'
         return view('client.modules.pack-four-page', compact('products'));
     }
+
 
     public function get_PackEightPage(){
         $products = Product::all();

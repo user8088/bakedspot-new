@@ -31,7 +31,7 @@
                         <p>{{$product->description}}</p>
                         <div>
                             <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2">Learn More</a>
-                            <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
+                            <a href="{{route('start-order')}}" class="btn btn-light">Order Now</a>
                         </div>
                     </div>
             </div>
@@ -45,7 +45,7 @@
                     <p>{{$product->description}}</p>
                     <div>
                         <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2">Learn More</a>
-                        <a href="{{route('get-packmenupage')}}" class="btn btn-light">Order Now</a>
+                        <a href="{{route('start-order')}}" class="btn btn-light">Order Now</a>
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex justify-content-center position-relative order-1 order-md-2">
