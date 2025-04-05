@@ -9,10 +9,10 @@ use Illuminate\Http\Request;
 class MasterController extends Controller
 {
     public function getHomePage()
-{
-    $products = Product::all();
-    return view('client.modules.home', compact('products'));
-}
+    {
+        $products = Product::with('images')->get(); // 👈 eager load 'images'
+        return view('client.modules.home', compact('products'));
+    }
 
 
     public function get_PackMenuPage()
@@ -28,7 +28,7 @@ class MasterController extends Controller
 
 
     public function get_PackEightPage(){
-        $products = Product::all();
+        $products = Product::with('images')->get(); // 👈 eager load 'images'
         return view('client.modules.pack-eight-page', compact('products'));
     }
 }

@@ -12,7 +12,7 @@ class ProductManagmentController extends Controller
 {
     public function get_productmanagmentpage()
     {
-        $products = Product::all();
+        $products = Product::with('images')->get(); // 👈 eager load 'images'
         return view('admin.modules.product_managment', compact('products'));
     }
 
@@ -151,7 +151,7 @@ class ProductManagmentController extends Controller
         'ingredients_tagline' => $request->ingredients_tagline,
     ]);
 
-    // ✅ Update Nutrition Data
+    // Update Nutrition Data
     if ($product->nutrition) {
         $product->nutrition->update([
             'calories' => $request->calories,

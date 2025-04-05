@@ -31,8 +31,9 @@
                 </div>
                 <!-- Image Column (Last on Mobile, First on Desktop) -->
                 <div class="col-lg-6 order-2 order-lg-1 text-center">
-                    <img src="{{asset('images/dummy-product.png')}}" class="img-fluid" alt="">
-
+                    @if($product->images->first()?->detail_image_url)
+                    <img src="{{ asset($product->images->first()->detail_image_url) }}" class="img-fluid" alt="Product Image">
+                    @endif
                     <!-- Stars + Rating (Mobile Only) -->
                     <div class="d-flex flex-column justify-content-center align-items-center text-white mt-3 d-block d-md-none">
                         <!-- Stars -->

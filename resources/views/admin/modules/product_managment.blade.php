@@ -25,7 +25,9 @@
                 @foreach ($products as $product)
                     <div class="row pb-4 border-bottom align-items-center">
                         <div class="col-12 col-md-2 d-flex justify-content-center mb-3 mb-md-0">
-                            <img src="{{ asset('images/dummy-product-1.png') }}" width="100" alt="">
+                            @if($product->images->first()?->home_image_url)
+                                <img src="{{ asset($product->images->first()->home_image_url) }}" class="img-fluid" alt="Product Image">
+                            @endif
                         </div>
 
                         <div class="col-12 col-md-5 text-center text-md-start mb-3 mb-md-0">

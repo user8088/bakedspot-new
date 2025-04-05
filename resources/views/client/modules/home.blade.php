@@ -24,7 +24,9 @@
         <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5" data-bg-color="{{ $product->theme_color }}">
                 <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
                     <div class="col-lg-6 d-flex justify-content-center position-relative">
-                        <img src="{{ asset('images/dummy-product-1.png') }}" class="img-fluid cookie-image" alt="">
+                        @if($product->images->first()?->home_image_url)
+                            <img src="{{ asset($product->images->first()->home_image_url) }}" class="img-fluid cookie-image" alt="Product Image">
+                        @endif
                     </div>
                     <div class="col-lg-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white">
                         <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">{{$product->name}}</h1>
@@ -49,7 +51,9 @@
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex justify-content-center position-relative order-1 order-md-2">
-                    <img src="{{ asset('images/dummy-product.png') }}" class="img-fluid cookie-image" alt="">
+                    @if($product->images->first()?->home_image_url)
+                        <img src="{{ asset($product->images->first()->home_image_url) }}" class="img-fluid cookie-image" alt="Product Image">
+                    @endif
                 </div>
             </div>
         </div>
@@ -67,7 +71,9 @@
                 <!-- Layout for even-indexed products -->
                 <div class="row g-2 pt-4">
                     <div class="col-6">
-                        <img src="{{ asset('images/dummy-product-1.png') }}" class="img-fluid" alt="">
+                        @if($product->images->first()?->home_image_url)
+                            <img src="{{ asset($product->images->first()->home_image_url) }}" class="img-fluid" alt="Product Image">
+                        @endif
                     </div>
                     <div class="col-6">
                         <h1 class="mobile-product-heading pt-3">{{ $product->name }}</h1>
@@ -82,7 +88,9 @@
                         <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2" style="color: #000">Learn More</a>
                     </div>
                     <div class="col-6">
-                        <img src="{{ asset('images/Chocolatebrownie.jpg') }}" class="img-fluid" alt="">
+                        @if($product->images->first()?->home_image_url)
+                            <img src="{{ asset($product->images->first()->home_image_url) }}" class="img-fluid" alt="Product Image">
+                        @endif
                     </div>
                 </div>
             @endif

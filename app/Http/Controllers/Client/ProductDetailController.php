@@ -10,10 +10,11 @@ class ProductDetailController extends Controller
 {
     public function get_ProductDetailsPage($id)
     {
-        // Fetch the product by ID
-        $product = Product::findOrFail($id); // If product doesn't exist, it will return 404
+        // Fetch the product by ID with eager loading of images
+        $product = Product::with('images')->findOrFail($id);
 
         // Pass the product to the view
         return view('client.modules.product-details-page', compact('product'));
     }
+
 }

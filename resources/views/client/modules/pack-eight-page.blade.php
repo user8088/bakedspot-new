@@ -1,54 +1,48 @@
 @extends('client.layouts.main')
+
 @section('page')
-<section class="pack8">
-    <div class="container pt-5 pb-5">
+<section class="pack4">
+    <div class="container pt-0 pt-md-5 pb-0 pb-md-5">
         <div class="row">
             <!-- Pink Container -->
             <div class="col-lg-6 pack-background position-relative">
-                <div class="container-box-eight" id="selected-items-container">
+                <div class="container-box" id="selected-items-container">
                     <!-- Selected images will appear here -->
                 </div>
             </div>
             <!-- Selection Panel -->
             <div class="col-lg-6">
-                <h1 class="heading-black-small pb-3 pt-3 ps-0 ps-md-5">Select 8 Flavors</h1>
+                <h1 class="heading-black-small pb-3 pt-3 ps-0 ps-md-5">Select 4 Flavors</h1>
                 <div class="row ps-0 ps-md-5">
-                    @php
-                        $flavors = [
-                            ['name' => 'Red Velvet Brownie', 'calories' => 690,'price' => 250, 'image' => 'dummy-product-1.png'],
-                            ['name' => 'Triple Chocolate Brownie', 'calories' => 880,'price' => 250, 'image' => 'dummy-product-2.png'],
-                            ['name' => 'Cookie Dough Brownie', 'calories' => 770, 'price' => 250,'image' => 'dummy-product.png'],
-                            ['name' => 'Peanut Butter Brownie', 'calories' => 880,'price' => 250, 'image' => 'dummy-product.png'],
-                            ['name' => 'Lemon Cheese Cake Brownie', 'calories' => 660,'price' => 250, 'image' => 'dummy-product.png'],
-                            ['name' => 'Classic Brownie', 'calories' => 910,'price' => 250, 'image' => 'dummy-product.png'],
-                        ];
-                    @endphp
-
-                    @foreach ($flavors as $flavor)
+                    @foreach ($products as $product)
                         <div class="d-flex align-items-center justify-content-between border-bottom my-2">
                             <div class="d-flex align-items-center">
-                                <img src="{{ asset('images/' . $flavor['image']) }}" class="flavor-img me-3" width="50">
+                                @if ($product->images->isNotEmpty() && $product->images->first()->pack_image_url)
+                                {{-- {{dd($product->images->first()->pack_image_ur)}} --}}
+                                <img src="{{asset($product->images->first()->pack_image_url) }}" class="flavor-img me-3" width="50">
+                                @else
+                                    <img src="{{ asset('images/default-image.png') }}" class="flavor-img me-3" width="50">
+                                @endif
                                 <div>
-                                    <strong>{{ $flavor['name'] }}</strong><br>
-                                    <span>{{ $flavor['calories'] }} cal</span>
+                                    <strong>{{ $product->name }}</strong><br>
+                                    <span>PKR. {{ $product->price }}</span>
                                 </div>
                             </div>
                             <div class="counter d-flex align-items-center">
-                                <button class="btn btn-sm btn-outline-dark decrease" data-name="{{ $flavor['name'] }}" data-price="{{ $flavor['price'] }}" data-image="{{ asset('images/' . $flavor['image']) }}">-</button>
-                                <span class="mx-2 quantity" data-name="{{ $flavor['name'] }}">0</span>
-                                <button class="btn btn-sm btn-outline-dark increase" data-name="{{ $flavor['name'] }}" data-price="{{ $flavor['price'] }}" data-image="{{ asset('images/' . $flavor['image']) }}">+</button>
+                                <button class="btn btn-sm btn-outline-dark decrease" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-image="{{ $product->images->isNotEmpty() && $product->images->first()->pack_image_url ? asset($product->images->first()->pack_image_url)  : asset('images/default-image.png') }}">-</button>
+                                <span class="mx-2 quantity" data-name="{{ $product->name }}">0</span>
+                                <button class="btn btn-sm btn-outline-dark increase" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-image="{{ $product->images->isNotEmpty() && $product->images->first()->pack_image_url ? asset($product->images->first()->pack_image_url) : asset('images/default-image.png') }}">+</button>
                             </div>
                         </div>
                     @endforeach
                 </div>
                 <div class="text-end text-md-end text-center sticky-bottom pb-3">
-                    <a class="btn btn-order show mt-3 p-3 disabled" href="#" id="add-to-bag">Add 8 More - PKR 0.00</a>
+                    <a class="btn btn-order show mt-3 p-3 disabled" href="#" id="add-to-bag">Add 4 More - PKR 0.00</a>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
 
 <script>
    document.addEventListener('DOMContentLoaded', function () {
