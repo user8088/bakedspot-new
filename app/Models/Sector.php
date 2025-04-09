@@ -11,6 +11,6 @@ class Sector extends Model
 
     protected $fillable = [
         'sector_name',
-        'cash_on_delivery',
+        'delivery_charges'
     ];
 }

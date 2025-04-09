@@ -4,9 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\MasterController;
 use App\Http\Controllers\Client\ProductDetailController;
 use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Client\CartController;
+
 use App\Http\Controllers\Admin\AdminMasterController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\ProductManagmentController;
+use App\Http\Controllers\Admin\SectorManagmentController;
+
 
 
 
@@ -36,21 +40,37 @@ Route::controller(AdminAuthController::class)->group(function () {
     Route::post('/logout-admin','logout_admin')->name('logout-admin');
 });
 
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
 
 
 // Protected Routes
-Route::middleware(['auth'])->group(function () {
+Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::controller(AdminMasterController::class)->group(function () {
-        Route::get('/dashboard', 'get_dashboard')->name('get-admindashboard');
+        Route::get('/', 'get_dashboard')->name('get-admindashboard');
     });
 
     Route::controller(ProductManagmentController::class)->group(function () {
-        Route::get('/dashboard/product-managment', 'get_productmanagmentpage')->name('get-productmanagmentpage');
-        Route::put('/dashboard/product-managment/edit-product/update-product/{id}', 'editProduct')->name('edit-product');
-        Route::get('/dashboard/product-managment/edit-product/{id}', 'get_editpage')->name('get-editpage');
-        Route::get('/dashboard/product-managment/new-product', 'get_newproductpage')->name('get-newproductpage');
-        Route::post('/dashboard/product-managment/new-product/add-product', 'storeProduct')->name('store-product');
-        Route::delete('/dashboard/product-managment/delete-product/{id}', 'deleteProduct')->name('delete-product');
+        Route::get('/product-managment', 'get_productmanagmentpage')->name('get-productmanagmentpage');
+        Route::put('/product-managment/edit-product/update-product/{id}', 'editProduct')->name('edit-product');
+        Route::get('/product-managment/edit-product/{id}', 'get_editpage')->name('get-editpage');
+        Route::get('/product-managment/new-product', 'get_newproductpage')->name('get-newproductpage');
+        Route::post('/product-managment/new-product/add-product', 'storeProduct')->name('store-product');
+        Route::delete('/product-managment/delete-product/{id}', 'deleteProduct')->name('delete-product');
+    });
 
+    Route::prefix('sector-managment')->group(function () {
+        Route::controller(SectorManagmentController::class)->group(function () {
+            Route::get('/','get_sectorManagmentPage')->name('get-sectormanagmentpage');
+                Route::prefix('add-sector')->group(function () {
+                    Route::get('/','get_addnewsectorpage')->name('get-addnewsectorpage');
+                    Route::post('/add-new','addNewSector')->name('add-newsector');
+                    Route::put('/update-sector/{id}','updateSector')->name('update-sector');
+                    Route::delete('/delete-sector/{id}','deleteSector')->name('delete-sector');
+            });
+        });
     });
 });
+

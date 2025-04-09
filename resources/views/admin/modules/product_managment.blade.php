@@ -17,11 +17,10 @@
             </a>
         </div>
     </div>
-    <div class="col-md-10 content">
+    <div class="col-md-12  content">
         <div class="row pt-5">
             <div class="container holder py-5 shadow" style="background-color: #fff;">
                 <h1 class="heading-black-small text-center pb-3">My Products</h1>
-
                 @foreach ($products as $product)
                     <div class="row pb-4 border-bottom align-items-center">
                         <div class="col-12 col-md-2 d-flex justify-content-center mb-3 mb-md-0">
