@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="container-fluid text-center pb-5" style="background-color: #ffc0cb;">
-        <img src="{{ asset('images/logo.png') }}" class="footer-logo" alt="">
+        <img src="{{ asset('images/logo.png') }}" class="img-fluid" alt="">
         <p>2025 @ all rights reserved.</p>
         <p>Privacy policy
             |

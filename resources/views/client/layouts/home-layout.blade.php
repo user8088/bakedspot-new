@@ -1,16 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Baked Spot</title>
     @include('client.partials.header')
-    @include('client.partials.navbar')
-</head>
-<body>
-    @yield('page')
-    {{-- Scripts --}}
+    <body>
+        @yield('page')
+        {{-- Scripts --}}
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
     <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
@@ -19,5 +13,5 @@
     </script>
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</body>
+    </body>
 </html>

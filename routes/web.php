@@ -45,7 +45,7 @@ Route::middleware(['web'])->group(function () {
     Route::controller(CartController::class)->group(function () {
         Route::post('/cart/add','add')->name('cart.add');
         Route::get('/cart', 'showCart')->name('cart.show');  // Add this route to display the cart
-
+        Route::post('/cart/remove', 'remove')->name('cart.remove');
     });
 });
 

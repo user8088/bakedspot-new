@@ -55,23 +55,31 @@ p{
     font-size: 40px !important;
 }
 
-.mainnavbar {
-    position: absolute;
+.navbar-container {
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000 !important;
-    background: transparent ;
-    transition: background-color 0.3s ease-in-out;
-    backdrop-filter: none;  /* Ensures no blur effect */
-    box-shadow: none ;
+    z-index: 9999;
+    background: transparent;
 }
 
+.mainnavbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    background: transparent;
+    transition: background-color 0.3s ease-in-out;
+    backdrop-filter: none;
+    box-shadow: none;
+}
 
 .mainnavbar.scrolled {
-    background-color: #FFB9CD; /* Pink background on scroll */
+    background-color: #FFB9CD;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
 
 .offcanvas-title{
     font-size: 35px;
@@ -83,7 +91,6 @@ p{
     color: #fda2bc !important;
     transition: 0.01s !important;
 }
-
 
 .fa-bars{
     font-size: 25px;
@@ -98,7 +105,6 @@ li:hover{
     color: #fda2bc;
     transition: 0.01s;
 }
-
 
 .navbar-brand {
     font-weight: bold;
@@ -122,6 +128,14 @@ li:hover{
     font-family: 'Bakedspot-Bold' !important;
 }
 
+.btn-order-nav {
+    background-color: #000 !important;
+    color: #fff !important;
+    border-radius: 30px !important;
+    border: #000 !important;
+    opacity: 0;
+}
+
 .btn-main {
     background-color: #000 !important;
     color: #fff !important;
@@ -130,12 +144,9 @@ li:hover{
     transition: opacity 0.3s ease-in-out;
 }
 
-
-
 .btn-order.show {
     opacity: 1;
 }
-
 
 .button-text{
     font-size: 15px;
@@ -149,12 +160,10 @@ li:hover{
     font-weight: bold;
 }
 
-
 .sidebar-toggler{
     background-color: transparent;
     border: none;
 }
-
 
 /* Home */
 .home{
@@ -165,20 +174,22 @@ li:hover{
 
 .video-section {
     position: relative;
-    height: 70vh; /* 70% of the viewport height */
+    height: 80vh;
     width: 100%;
     overflow: hidden;
     z-index: 1;
+    padding-top: 0;
 }
 
 .hero-video {
-    position: absolute; /* Ensure the video is positioned relative to .video-section */
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block; /* Ensures the video covers the entire container */
+    display: block;
+    z-index: 1;
 }
 
 .overlay-content {
@@ -191,12 +202,14 @@ li:hover{
 
 /* Content section styling */
 .content-section {
-    background-color: #fff;  /* Optional: to differentiate sections */
-    z-index: 3;
+    background-color: #fff;
     position: relative;
+    margin-top: 0;
 }
 
-
+.content-section:first-of-type {
+    padding-top: 0;
+}
 
 .secondaryheading{
     font-size: 100px;
@@ -209,7 +222,6 @@ li:hover{
 .mobile-product-heading{
     font-size: 20px !important;
 }
-
 
 @media (max-width: 767px)
 {
@@ -226,7 +238,6 @@ li:hover{
     position: absolute;
     left: -10px;            /* Controls horizontal stick-out */
     bottom: -180px;          /* Moves the image down a bit */
-    z-index: 2;             /* Keeps the image above the container */
     transform: translateY(20px);
 }
 
@@ -239,6 +250,7 @@ li:hover{
     height: 55vh;
     overflow: visible;
     transition: background-color 0.3s ease-in-out !important;
+    position: relative;
 }
 
 .home-brownie-container h1,
@@ -256,7 +268,6 @@ li:hover{
     background-color: #fff;  /* Initial background for 'Order Now' button */
 }
 
-
 /* .home-brownie-container:hover {
     background-color: #693b22;
 } */
@@ -272,31 +283,27 @@ li:hover{
     color: #000 !important;  /* Change border color to white on hover */
 }
 
-.footer-logo{
-    width: 500px;
-}
-
 .home-brownie-container:hover .btn {
     border-color: #fff !important;
 }
 
 .wavy-product {
-    /* Your brown background */
     position: relative;
     overflow: hidden;
     height: 110vh;
-  }
+    z-index: 1; /* Lower z-index than navbar */
+}
 
-  .wave {
+.wave {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     display: block;
-  }
+    z-index: 1;
+}
 
-
-  .btn-order-white {
+.btn-order-white {
     background-color: #fff !important;
     color: #000;
     font-family: 'Bakedspot-Regular' !important;
@@ -325,8 +332,6 @@ li:hover{
     text-align: center;
 }
 
-
-
 .review-card {
     border-radius: 20px;
     padding: 20px;
@@ -337,8 +342,6 @@ li:hover{
     overflow: hidden;
     height: 100%;
 }
-
-
 
 .quote-icon {
     color: pink;
@@ -388,7 +391,6 @@ li:hover{
     transform: translate(-50%, -50%);
 }
 
-
 .pack-background {
     background-color: #FFB9CD;
     height: 100vh;
@@ -401,7 +403,6 @@ li:hover{
     align-items: center;
     overflow: hidden;
 }
-
 
 .selected-img {
     width: 80px;
@@ -794,9 +795,7 @@ li:hover{
 
     }
 
-    .footer-logo{
-        width: 300px;
-    }
+
 
     .text-basic{
         font-size: 18px;
@@ -841,6 +840,23 @@ li:hover{
             transition: all 0.3s ease-in-out;
         }
 
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Image Optimization */
+img {
+    max-width: 100%;
+    height: auto;
+    loading: lazy;
 }
 
 

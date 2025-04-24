@@ -49,7 +49,7 @@
                         <input type="hidden" name="item_8">
                         <input type="hidden" name="total_price">
                     </form>
-                    <a class="btn btn-order show mt-3 p-3 disabled" href="#" id="add-to-bag">Add 4 More - PKR 0.00</a>
+                    <button class="btn btn-order mt-3 p-3" id="add-to-bag" style="opacity: 0.5; pointer-events: none;">Add 4 More - PKR 0.00</button>
                 </div>
             </div>
         </div>
@@ -58,14 +58,24 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Initialize CSRF token for AJAX
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
+    function showToast(message, type = 'success') {
+        const toast = $(`
+            <div class="custom-toast ${type}">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            </div>
+        `);
 
+        $('.toast-container').append(toast);
+
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toast.css('animation', 'slideOut 0.3s ease-out');
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
         const container = document.getElementById('selected-items-container');
         const addToBagButton = document.getElementById('add-to-bag');
         let totalPrice = 0;
@@ -95,10 +105,12 @@
             let remaining = 4 - totalSelected;
             if (remaining === 0) {
                 addToBagButton.innerText = `Add to Bag - PKR ${totalPrice.toFixed(2)}`;
-                addToBagButton.classList.remove('disabled');
+                addToBagButton.style.opacity = '1';
+                addToBagButton.style.pointerEvents = 'auto';
             } else {
                 addToBagButton.innerText = `Add ${remaining} More - PKR ${totalPrice.toFixed(2)}`;
-                addToBagButton.classList.add('disabled');
+                addToBagButton.style.opacity = '0.5';
+                addToBagButton.style.pointerEvents = 'none';
             }
         }
 
@@ -164,13 +176,12 @@
             });
         });
 
-            addToBagButton.addEventListener('click', function (e) {
+        addToBagButton.addEventListener('click', function (e) {
             e.preventDefault();
 
             if (totalSelected !== 4) return; // Safety check
 
             const form = document.getElementById('cart-form');
-            const inputs = form.querySelectorAll('input');
 
             // Fill in the selected item IDs
             let selectedIds = [];
@@ -188,7 +199,70 @@
 
             form.querySelector('[name="total_price"]').value = totalPrice.toFixed(2);
 
-            form.submit();
+            // Create FormData and log it
+            const formData = new FormData(form);
+            console.log('Form data before submission:', Object.fromEntries(formData));
+
+            // Show loading state
+            addToBagButton.disabled = true;
+            addToBagButton.innerHTML = '<span class="spinner-border spinner-border-sm" style="color: #ffc0cb;" role="status" aria-hidden="true"></span> Adding...';
+
+            // Submit form via AJAX
+            $.ajax({
+                url: form.action,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Animate cart button
+                        animateCartButton();
+
+                        // Update cart count in navbar
+                        const cartBtn = document.getElementById('cartBtn');
+                        if (cartBtn) {
+                            cartBtn.querySelector('.button-text').textContent = `View Bag (${response.cartCount})`;
+                        }
+
+                        // Refresh cart contents
+                        refreshCart();
+
+                        // Show the cart offcanvas
+                        const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+                        cartOffcanvas.show();
+
+                        // Show success message
+                        showToast('Item added to cart successfully');
+
+                        // Reset form
+                        form.reset();
+
+                        // Reset button state
+                        addToBagButton.disabled = false;
+                        addToBagButton.textContent = 'Add to Bag';
+                    } else {
+                        showToast(response.message || 'Failed to add item to cart', 'error');
+                        addToBagButton.disabled = false;
+                        addToBagButton.textContent = 'Add to Bag';
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error response:', xhr.responseJSON);
+                    let errorMessage = 'Failed to add item to cart. Please try again.';
+
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+
+                    showToast(errorMessage, 'error');
+                    addToBagButton.disabled = false;
+                    addToBagButton.textContent = 'Add to Bag';
+                }
+            });
         });
     });
 </script>
