@@ -40,9 +40,14 @@ Route::controller(AdminAuthController::class)->group(function () {
     Route::post('/logout-admin','logout_admin')->name('logout-admin');
 });
 
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
-Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+// Cart Routes
+Route::middleware(['web'])->group(function () {
+    Route::controller(CartController::class)->group(function () {
+        Route::post('/cart/add','add')->name('cart.add');
+        Route::get('/cart', 'showCart')->name('cart.show');  // Add this route to display the cart
+
+    });
+});
 
 
 

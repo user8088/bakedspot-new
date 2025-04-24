@@ -18,7 +18,6 @@ document.addEventListener("scroll", function () {
     } else {
         navbar.classList.remove("scrolled");
         orderBtn.classList.remove("show");
-
     }
 });
 

@@ -54,6 +54,7 @@ class ProductManagmentController extends Controller
             'heading' => $request->heading,
             'description' => $request->description,
             'allergy_info' => $request->allergy_info,
+            'price' => $request->price,
             'theme_color' => $request->theme_color,
             'ingredients_tagline' => $request->ingredients_tagline,
         ]);

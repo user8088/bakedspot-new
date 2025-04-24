@@ -37,6 +37,11 @@
                     <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" id="description" name="description">{{ old('description', $product->description) }}</textarea>
                 </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price (PKR)</label>
+                    <input type="number" class="form-control" id="price" name="price" value="{{ old('price', $product->price ?? '') }}" >
+                </div>
+
 
                 <!-- Nutritional Details -->
                 <h1 class="heading-black-small pb-5 pt-5">Edit Nutritional Details</h1>
