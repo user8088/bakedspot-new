@@ -26,8 +26,8 @@
             @foreach ($products as $product)
         @if($loop->index % 2 == 0)
             <!-- Layout for even-indexed products -->
-            <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5" data-bg-color="{{ $product->theme_color }}">
-                    <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
+            <div class="container home-brownie-container position-relative my-5 py-5" data-bg-color="{{ $product->theme_color }}">
+                    <div class="row pt-5 pb-5 align-items-center justify-content-center text-center text-lg-start position-relative">
                         <div class="col-lg-6 d-flex justify-content-center position-relative">
                             @if($product->images->first()?->home_image_url)
                                 <img src="{{ asset($product->images->first()->home_image_url) }}" class="img-fluid cookie-image" alt="Product Image">
@@ -45,8 +45,8 @@
             </div>
         @else
             <!-- Layout for odd-indexed products (switches order of image and text) -->
-            <div class="container home-brownie-container position-relative mt-5 pt-5 mb-5" data-bg-color="{{ $product->theme_color }}">
-                <div class="row pt-3 pb-3 align-items-center justify-content-center text-center text-lg-start position-relative">
+            <div class="container home-brownie-container position-relative my-5 py-5" data-bg-color="{{ $product->theme_color }}">
+                <div class="row pt-5 pb-5 align-items-center justify-content-center text-center text-lg-start position-relative">
                     <div class="col-lg-6 ps-0 ps-md-5 ps-lg-5 d-flex flex-column align-items-center align-items-lg-start justify-content-center text-white order-2 order-md-1">
                         <h1 class="fw-bold product-heading pt-5 mt-5 mt-md-0 mt-lg-0 pt-md-0 pt-lg-0">{{$product->name}}</h1>
                         <p>{{$product->description}}</p>
@@ -190,5 +190,40 @@
         background-color: #333;
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .home-brownie-container {
+        margin: 4rem 0;
+        padding: 3rem 0;
+        transition: all 0.3s ease;
+    }
+
+    .cookie-image {
+        max-height: 400px;
+        object-fit: contain;
+        margin: 2rem 0;
+    }
+
+    .product-heading {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 992px) {
+        .home-brownie-container {
+            margin: 5rem 0;
+            padding: 4rem 0;
+        }
+    }
+
+    /* Ensure proper stacking context */
+    .row {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Add extra margin to prevent overlap */
+    .content-section .container {
+        margin-bottom: 8rem;
     }
 </style>
