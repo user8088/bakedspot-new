@@ -60,7 +60,7 @@ p{
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 100;
     background: transparent;
 }
 
@@ -69,7 +69,7 @@ p{
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 100;
     background: transparent;
     transition: background-color 0.3s ease-in-out;
     backdrop-filter: none;
@@ -79,6 +79,7 @@ p{
 .mainnavbar.scrolled {
     background-color: #FFB9CD;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 100;
 }
 
 .offcanvas-title{
@@ -205,6 +206,7 @@ li:hover{
     background-color: #fff;
     position: relative;
     margin-top: 0;
+    transform: translateZ(0);
 }
 
 .content-section:first-of-type {
@@ -247,7 +249,6 @@ li:hover{
 
 .home-brownie-container {
     border-radius: 30px;
-    /* height: 50%; */
     overflow: visible;
     transition: background-color 0.3s ease-in-out !important;
     position: relative;
@@ -526,7 +527,7 @@ li:hover{
     top: 70;
     width: 200px;
     background-color: white;
-    z-index: 100;
+    z-index: 9999;
     box-shadow: -3px 0 5px rgba(0, 0, 0, 0.2);
     background-color: #fff;
     color: #000;
@@ -869,6 +870,24 @@ img {
         margin: 5rem 0;
         padding: 4rem 0;
     }
+}
+
+.content-section-mobile {
+    position: relative;
+    margin-top: 0;
+    transform: translateZ(0);
+}
+
+.offcanvas {
+    z-index: 9999 !important;
+}
+
+.toast-container {
+    z-index: 99999 !important;
+}
+
+.toast {
+    z-index: 99999 !important;
 }
 
 
