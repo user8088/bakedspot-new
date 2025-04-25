@@ -3,20 +3,6 @@
 @section('page')
     <div class="col-lg-10 content">
         <div class="container shadow pt-5 p-5" style="background-color: #fff; border-radius: 30px;">
-            @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
             <h1 class="heading-black-small pb-5 pt-5">Edit General Details</h1>
 
             <form action="{{ route('edit-product', $product->id) }}" method="POST" enctype="multipart/form-data">

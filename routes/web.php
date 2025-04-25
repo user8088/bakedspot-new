@@ -23,6 +23,7 @@ Route::controller(MasterController::class)->group(function () {
     Route::get('/pack-menu', 'get_PackMenuPage')->name('get-packmenupage');
     Route::get('/pack-menu/pack-4', 'get_PackFourPage')->name('get-packfourpage');
     Route::get('/pack-menu/pack-8', 'get_PackEightPage')->name('get-packeightpage');
+    Route::post('/save-sector', 'saveSectorSelection')->name('save.sector');
 });
 
 Route::controller(ProductDetailController::class)->group(function () {

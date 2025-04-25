@@ -228,15 +228,29 @@
                             cartBtn.querySelector('.button-text').textContent = `View Bag (${response.cartCount})`;
                         }
 
-                        // Refresh cart contents
-                        refreshCart();
+                        // First fetch the updated cart contents and then show the offcanvas
+                        $.ajax({
+                            url: '{{ route("cart.show") }}',
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(cartResponse) {
+                                // Build cart HTML manually since the offcanvas is already in the DOM
+                                buildCartHTML(cartResponse);
 
-                        // Show the cart offcanvas
-                        const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
-                        cartOffcanvas.show();
+                                // Show the offcanvas after content is updated
+                                const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+                                cartOffcanvas.show();
 
-                        // Show success message
-                        showToast('Item added to cart successfully');
+                                // Show success message
+                                showToast('Item added to cart successfully');
+                            },
+                            error: function() {
+                                // Still show the cart even if refresh fails
+                                const cartOffcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+                                cartOffcanvas.show();
+                                showToast('Item added to cart successfully');
+                            }
+                        });
 
                         // Reset form
                         form.reset();
@@ -265,6 +279,132 @@
             });
         });
     });
+
+    function refreshCart() {
+        $.ajax({
+            url: '{{ route("cart.show") }}',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                // Update cart count in navbar
+                updateCartCount(response.cartItems ? response.cartItems.length : 0);
+
+                // Build the cart HTML
+                buildCartHTML(response);
+
+                console.log('Cart refreshed successfully');
+            },
+            error: function(xhr, status, error) {
+                console.error('Failed to refresh cart:', error);
+                showToast('Failed to refresh cart', 'error');
+            }
+        });
+    }
+
+    function buildCartHTML(response) {
+        // Get the cart items container
+        const cartItemsContainer = document.getElementById('cartItems');
+        if (!cartItemsContainer) return;
+
+        let html = '';
+
+        if (!response.cartItems || response.cartItems.length === 0) {
+            html = '<p class="text-center">Your bag is empty.</p>';
+        } else {
+            // Calculate subtotal
+            let subtotal = 0;
+
+            // Add cart items
+            response.cartItems.forEach(function(item) {
+                subtotal += parseFloat(item.total_price);
+                html += `
+                <div class="row cart-item pb-3 pt-3 border-top" data-cart-id="${item.id}">
+                    <div class="col-lg-3">
+                        <img src="{{ asset('images/pk-4.png') }}" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-lg-3">
+                        <p class="pt-2">${item.pack_type}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="pt-2"><b>PKR ${parseFloat(item.total_price).toFixed(2)}</b></p>
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="button" class="btn btn-link p-0 remove-item" data-cart-id="${item.id}">
+                            <i class="fas fa-trash-alt text-danger" title="Remove item"></i>
+                        </button>
+                    </div>
+                </div>`;
+            });
+
+            // Add order summary
+            html += `
+            <div class="row mt-4">
+                <div class="col-12">
+                    <hr>
+                    <h6 class="text-muted">Order Summary</h6>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <span>Subtotal:</span>
+                        <span><b>PKR ${subtotal.toFixed(2)}</b></span>
+                    </div>`;
+
+            // Add delivery info if sector is selected
+            if (response.selected_sector) {
+                const deliveryCharges = parseFloat(response.selected_sector.delivery_charges);
+                const total = subtotal + deliveryCharges;
+
+                html += `
+                <div class="d-flex justify-content-between mt-2">
+                    <span>Delivery to ${response.selected_sector.name}:</span>
+                    <span><b>PKR ${deliveryCharges.toFixed(2)}</b></span>
+                </div>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <span class="fw-bold">Total:</span>
+                    <span class="fw-bold">PKR ${total.toFixed(2)}</span>
+                </div>`;
+            } else {
+                html += `
+                <div class="alert alert-warning mt-3 py-2 small">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Please <a href="{{ route('get-packmenupage') }}" class="alert-link">select a delivery area</a> to continue.
+                </div>`;
+            }
+
+            html += `
+                </div>
+            </div>`;
+        }
+
+        // Update cart items container
+        cartItemsContainer.innerHTML = html;
+
+        // Update checkout button
+        const checkoutBtnContainer = document.querySelector('.offcanvas-body > .mt-4');
+        if (checkoutBtnContainer) {
+            let checkoutBtn = '';
+            if (response.cartItems && response.cartItems.length > 0) {
+                if (response.selected_sector) {
+                    checkoutBtn = '<a href="#" class="btn btn-main w-100">Proceed to Checkout</a>';
+                } else {
+                    checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Select Delivery Area</a>';
+                }
+            } else {
+                checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Order Now</a>';
+            }
+            checkoutBtnContainer.innerHTML = checkoutBtn;
+        }
+    }
+
+    function animateCartButton() {
+        const cartBtn = document.getElementById('cartBtn');
+        if (cartBtn) {
+            cartBtn.classList.add('pulse-animation');
+            setTimeout(() => {
+                cartBtn.classList.remove('pulse-animation');
+            }, 1000);
+        }
+    }
 </script>
 
 @endsection
