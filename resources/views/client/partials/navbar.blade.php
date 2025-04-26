@@ -1,4 +1,10 @@
-<nav class="navbar mainnavbar navbar-expand-lg p-3 sticky-top">
+@php
+    $currentRoute = request()->route()->getName();
+    $isHomePage = $currentRoute === 'home' || request()->is('/');
+    $navbarClass = $isHomePage ? 'mainnavbar' : 'mainnavbar non-home-navbar';
+@endphp
+
+<nav class="navbar {{ $navbarClass }} navbar-expand-lg p-3 sticky-top">
     <div class="container">
         <div class="row w-100 align-items-center">
             <!-- Offcanvas Toggler (Left Menu) -->
@@ -66,7 +72,8 @@
 @include('client.partials.cart')
 
 <script>
-    function updateCartCount(count) {
+    // Make the updateCartCount function globally available
+    window.updateCartCount = function(count) {
         const orderNowBtn = document.getElementById('orderNowBtn');
         const cartBtn = document.getElementById('cartBtn');
         const cartButtons = document.getElementById('cart-buttons');
@@ -107,4 +114,21 @@
             }
         }
     }
+
+    // Check if this is not the home page
+    document.addEventListener("DOMContentLoaded", function() {
+        const isHomePage = window.location.pathname === '/' || window.location.pathname === '';
+        const navbar = document.querySelector('.navbar');
+
+        // If this is not home page, add the background color immediately
+        if (!isHomePage) {
+            navbar.classList.add('non-home-navbar');
+        }
+    });
 </script>
+
+<style>
+    .non-home-navbar {
+        background-color: #FFB9CD !important;
+    }
+</style>

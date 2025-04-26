@@ -152,23 +152,6 @@
             });
         });
 
-        function showToast(message, type = 'success') {
-            const toast = $(`
-                <div class="custom-toast ${type}">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                    <span>${message}</span>
-                </div>
-            `);
-
-            $('.toast-container').append(toast);
-
-            // Remove toast after 3 seconds
-            setTimeout(() => {
-                toast.css('animation', 'slideOut 0.3s ease-out');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
         addToBagButton.addEventListener('click', function(e) {
             e.preventDefault();
 
@@ -214,8 +197,10 @@
                         // Animate cart button
                         animateCartButton();
 
-                        // Update cart count and button visibility
-                        updateCartCount(response.cartCount);
+                        // Call the navbar's updateCartCount function
+                        if (typeof window.updateCartCount === 'function') {
+                            window.updateCartCount(response.cartCount);
+                        }
 
                         // First fetch the updated cart contents and then show the offcanvas
                         $.ajax({
@@ -274,8 +259,10 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
-                    // Update cart count in navbar
-                    updateCartCount(response.cartItems ? response.cartItems.length : 0);
+                    // Call the navbar's updateCartCount function
+                    if (typeof window.updateCartCount === 'function') {
+                        window.updateCartCount(response.cartItems ? response.cartItems.length : 0);
+                    }
 
                     // Build the cart HTML
                     buildCartHTML(response);

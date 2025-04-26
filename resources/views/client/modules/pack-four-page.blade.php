@@ -58,23 +58,6 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function showToast(message, type = 'success') {
-        const toast = $(`
-            <div class="custom-toast ${type}">
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                <span>${message}</span>
-            </div>
-        `);
-
-        $('.toast-container').append(toast);
-
-        // Remove toast after 3 seconds
-        setTimeout(() => {
-            toast.css('animation', 'slideOut 0.3s ease-out');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
         const container = document.getElementById('selected-items-container');
         const addToBagButton = document.getElementById('add-to-bag');
@@ -222,10 +205,9 @@
                         // Animate cart button
                         animateCartButton();
 
-                        // Update cart count in navbar
-                        const cartBtn = document.getElementById('cartBtn');
-                        if (cartBtn) {
-                            cartBtn.querySelector('.button-text').textContent = `View Bag (${response.cartCount})`;
+                        // Call the navbar's updateCartCount function with response.cartCount
+                        if (typeof window.updateCartCount === 'function') {
+                            window.updateCartCount(response.cartCount);
                         }
 
                         // First fetch the updated cart contents and then show the offcanvas
@@ -286,8 +268,10 @@
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                // Update cart count in navbar
-                updateCartCount(response.cartItems ? response.cartItems.length : 0);
+                // Call the navbar's updateCartCount function
+                if (typeof window.updateCartCount === 'function') {
+                    window.updateCartCount(response.cartItems ? response.cartItems.length : 0);
+                }
 
                 // Build the cart HTML
                 buildCartHTML(response);

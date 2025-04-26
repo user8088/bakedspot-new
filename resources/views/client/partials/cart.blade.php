@@ -82,23 +82,6 @@
 </div>
 
 <script>
-    function showToast(message, type = 'success') {
-        const toast = $(`
-            <div class="custom-toast ${type}">
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                <span>${message}</span>
-            </div>
-        `);
-
-        $('.toast-container').append(toast);
-
-        // Remove toast after 3 seconds
-        setTimeout(() => {
-            toast.css('animation', 'slideOut 0.3s ease-out');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
-
     $(document).ready(function() {
         // Set up CSRF token for all AJAX requests
         $.ajaxSetup({
@@ -132,11 +115,13 @@
                                 $('#cartItems').html('<p class="text-center">Your bag is empty.</p>');
                             }
                             // Update cart count
-                            updateCartCount($('.cart-item').length);
+                            if (typeof window.updateCartCount === 'function') {
+                                window.updateCartCount($('.cart-item').length);
+                            }
                             // Show success message
                             showToast('Item removed from cart');
-                            // Refresh entire cart to update totals
-                            refreshCart();
+                            // Refresh entire cart to update totals without showing additional toasts
+                            refreshCartSilent();
                         });
                     } else {
                         // Show error message
@@ -162,95 +147,7 @@
             type: 'GET',
             dataType: 'json',
             success: function(response) {
-                // Build the cart HTML based on the JSON response
-                let html = '';
-
-                if (!response.cartItems || response.cartItems.length === 0) {
-                    html = '<p class="text-center">Your bag is empty.</p>';
-                } else {
-                    // Calculate subtotal
-                    let subtotal = 0;
-
-                    // Add cart items
-                    response.cartItems.forEach(function(item) {
-                        subtotal += parseFloat(item.total_price);
-                        html += `
-                        <div class="row cart-item pb-3 pt-3 border-top" data-cart-id="${item.id}">
-                            <div class="col-lg-3">
-                                <img src="{{ asset('images/pk-4.png') }}" class="img-fluid" alt="">
-                            </div>
-                            <div class="col-lg-3">
-                                <p class="pt-2">${item.pack_type}</p>
-                            </div>
-                            <div class="col-lg-4">
-                                <p class="pt-2"><b>PKR ${parseFloat(item.total_price).toFixed(2)}</b></p>
-                            </div>
-                            <div class="col-lg-2">
-                                <button type="button" class="btn btn-link p-0 remove-item" data-cart-id="${item.id}">
-                                    <i class="fas fa-trash-alt text-danger" title="Remove item"></i>
-                                </button>
-                            </div>
-                        </div>`;
-                    });
-
-                    // Add order summary
-                    html += `
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <hr>
-                            <h6 class="text-muted">Order Summary</h6>
-
-                            <div class="d-flex justify-content-between mt-3">
-                                <span>Subtotal:</span>
-                                <span><b>PKR ${subtotal.toFixed(2)}</b></span>
-                            </div>`;
-
-                    // Add delivery info if sector is selected
-                    if (response.selected_sector) {
-                        const deliveryCharges = parseFloat(response.selected_sector.delivery_charges);
-                        const total = subtotal + deliveryCharges;
-
-                        html += `
-                        <div class="d-flex justify-content-between mt-2">
-                            <span>Delivery to ${response.selected_sector.name}:</span>
-                            <span><b>PKR ${deliveryCharges.toFixed(2)}</b></span>
-                        </div>
-
-                        <div class="d-flex justify-content-between mt-3">
-                            <span class="fw-bold">Total:</span>
-                            <span class="fw-bold">PKR ${total.toFixed(2)}</span>
-                        </div>`;
-                    } else {
-                        html += `
-                        <div class="alert alert-warning mt-3 py-2 small">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            Please <a href="{{ route('get-packmenupage') }}" class="alert-link">select a delivery area</a> to continue.
-                        </div>`;
-                    }
-
-                    html += `
-                        </div>
-                    </div>`;
-                }
-
-                // Update cart items container
-                $('#cartItems').html(html);
-
-                // Update checkout button
-                let checkoutBtn = '';
-                if (response.cartItems && response.cartItems.length > 0) {
-                    if (response.selected_sector) {
-                        checkoutBtn = '<a href="#" class="btn btn-main w-100">Proceed to Checkout</a>';
-                    } else {
-                        checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Select Delivery Area</a>';
-                    }
-                } else {
-                    checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Order Now</a>';
-                }
-                $('.offcanvas-body > .mt-4').html(checkoutBtn);
-
-                // Update cart count in navbar
-                updateCartCount(response.cartItems ? response.cartItems.length : 0);
+                updateCartHTML(response);
             },
             error: function(xhr, status, error) {
                 console.error('Failed to refresh cart:', error);
@@ -258,6 +155,121 @@
                 showToast('Failed to load cart items', 'error');
             }
         });
+    }
+
+    // Silent version that doesn't show error toasts
+    function refreshCartSilent() {
+        // Show loading state with pink spinner
+        $('#cartItems').html('<div class="text-center"><div class="spinner-border" style="color: #ffc0cb;" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+
+        $.ajax({
+            url: '{{ route("cart.show") }}',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                updateCartHTML(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('Failed to refresh cart silently:', error);
+                $('#cartItems').html('<p class="text-center text-danger">Failed to load cart items. Please try again.</p>');
+                // No toast shown
+            }
+        });
+    }
+
+    // Common function to update cart HTML
+    function updateCartHTML(response) {
+        // Build the cart HTML based on the JSON response
+        let html = '';
+
+        if (!response.cartItems || response.cartItems.length === 0) {
+            html = '<p class="text-center">Your bag is empty.</p>';
+        } else {
+            // Calculate subtotal
+            let subtotal = 0;
+
+            // Add cart items
+            response.cartItems.forEach(function(item) {
+                subtotal += parseFloat(item.total_price);
+                html += `
+                <div class="row cart-item pb-3 pt-3 border-top" data-cart-id="${item.id}">
+                    <div class="col-lg-3">
+                        <img src="{{ asset('images/pk-4.png') }}" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-lg-3">
+                        <p class="pt-2">${item.pack_type}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <p class="pt-2"><b>PKR ${parseFloat(item.total_price).toFixed(2)}</b></p>
+                    </div>
+                    <div class="col-lg-2">
+                        <button type="button" class="btn btn-link p-0 remove-item" data-cart-id="${item.id}">
+                            <i class="fas fa-trash-alt text-danger" title="Remove item"></i>
+                        </button>
+                    </div>
+                </div>`;
+            });
+
+            // Add order summary
+            html += `
+            <div class="row mt-4">
+                <div class="col-12">
+                    <hr>
+                    <h6 class="text-muted">Order Summary</h6>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <span>Subtotal:</span>
+                        <span><b>PKR ${subtotal.toFixed(2)}</b></span>
+                    </div>`;
+
+            // Add delivery info if sector is selected
+            if (response.selected_sector) {
+                const deliveryCharges = parseFloat(response.selected_sector.delivery_charges);
+                const total = subtotal + deliveryCharges;
+
+                html += `
+                <div class="d-flex justify-content-between mt-2">
+                    <span>Delivery to ${response.selected_sector.name}:</span>
+                    <span><b>PKR ${deliveryCharges.toFixed(2)}</b></span>
+                </div>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <span class="fw-bold">Total:</span>
+                    <span class="fw-bold">PKR ${total.toFixed(2)}</span>
+                </div>`;
+            } else {
+                html += `
+                <div class="alert alert-warning mt-3 py-2 small">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Please <a href="{{ route('get-packmenupage') }}" class="alert-link">select a delivery area</a> to continue.
+                </div>`;
+            }
+
+            html += `
+                </div>
+            </div>`;
+        }
+
+        // Update cart items container
+        $('#cartItems').html(html);
+
+        // Update checkout button
+        let checkoutBtn = '';
+        if (response.cartItems && response.cartItems.length > 0) {
+            if (response.selected_sector) {
+                checkoutBtn = '<a href="#" class="btn btn-main w-100">Proceed to Checkout</a>';
+            } else {
+                checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Select Delivery Area</a>';
+            }
+        } else {
+            checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Order Now</a>';
+        }
+        $('.offcanvas-body > .mt-4').html(checkoutBtn);
+
+        // Update cart count in navbar
+        if (typeof window.updateCartCount === 'function') {
+            window.updateCartCount(response.cartItems ? response.cartItems.length : 0);
+        }
     }
 </script>
 

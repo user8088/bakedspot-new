@@ -66,5 +66,4 @@
     </style>
 </head>
 <body>
-    <div class="toast-container"></div>
 

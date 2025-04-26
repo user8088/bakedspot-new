@@ -12,14 +12,23 @@
                     <i class="fas fa-chevron-down arrow-icon"></i>
                 </div>
                 <div class="location-options" style="display: none;">
-                    @foreach($sectors as $sector)
-                    <div class="location-option" data-id="{{ $sector->id }}" data-name="{{ $sector->sector_name }}" data-charges="{{ $sector->delivery_charges }}">
-                        <div class="option-details">
-                            <div class="option-name">{{ $sector->sector_name }}</div>
-                            <div class="option-charges">PKR {{ $sector->delivery_charges }}</div>
-                        </div>
+                    <div class="search-container">
+                        <input type="text" id="sector-search" class="form-control form-control-sm" placeholder="Search your area...">
                     </div>
-                    @endforeach
+                    <div id="sectors-list">
+                        @foreach($sectors as $sector)
+                        <div class="location-option" data-id="{{ $sector->id }}" data-name="{{ $sector->sector_name }}" data-charges="{{ $sector->delivery_charges }}">
+                            <div class="option-details">
+                                <div class="option-name">{{ $sector->sector_name }}</div>
+                                <div class="option-charges">PKR {{ $sector->delivery_charges }}</div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    <div id="no-results" class="no-results" style="display: none;">
+                        <p>It seems we don't deliver to your area yet.</p>
+                        <small>We're expanding! Check back soon or contact us for updates.</small>
+                    </div>
                 </div>
             </div>
             <div id="sector-feedback" class="mt-2"></div>
@@ -181,6 +190,44 @@
             });
         });
 
+        // Add search functionality
+        const searchInput = document.getElementById('sector-search');
+        const sectorsList = document.getElementById('sectors-list');
+        const noResults = document.getElementById('no-results');
+
+        searchInput.addEventListener('keyup', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            const options = sectorsList.querySelectorAll('.location-option');
+            let hasResults = false;
+
+            options.forEach(option => {
+                const sectorName = option.getAttribute('data-name').toLowerCase();
+                if (sectorName.includes(searchTerm)) {
+                    option.style.display = 'block';
+                    hasResults = true;
+                } else {
+                    option.style.display = 'none';
+                }
+            });
+
+            // Show or hide the no results message
+            if (hasResults) {
+                noResults.style.display = 'none';
+            } else {
+                noResults.style.display = 'block';
+            }
+        });
+
+        // Clear search when opening dropdown
+        selectedDisplay.addEventListener('click', function() {
+            if (options.style.display === 'none') {
+                searchInput.value = '';
+                const allOptions = sectorsList.querySelectorAll('.location-option');
+                allOptions.forEach(opt => opt.style.display = 'block');
+                noResults.style.display = 'none';
+            }
+        });
+
         // Helper function to show feedback
         function showFeedback(message, type) {
             if (feedbackDiv) {
@@ -311,6 +358,45 @@
         .location-option {
             padding: 14px 20px;
         }
+    }
+
+    .search-container {
+        padding: 8px 12px;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 2;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    #sector-search {
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        padding: 8px 12px;
+        width: 100%;
+        font-size: 14px;
+    }
+
+    #sector-search:focus {
+        border-color: #FFB9CD;
+        box-shadow: 0 0 0 2px rgba(255, 185, 205, 0.25);
+        outline: none;
+    }
+
+    .no-results {
+        padding: 16px;
+        text-align: center;
+        color: #777;
+    }
+
+    .no-results p {
+        margin-bottom: 4px;
+        font-weight: 500;
+    }
+
+    .no-results small {
+        display: block;
+        color: #999;
     }
     </style>
 </section>
