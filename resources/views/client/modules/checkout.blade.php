@@ -27,8 +27,39 @@
                         </div>
                     </div>
 
-                    <!-- Delivery Address -->
+                    <!-- Delivery Options -->
                     <div class="checkout-section mb-4">
+                        <h2 class="section-title">Delivery Options</h2>
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery" value="delivery" checked>
+                                    <label class="form-check-label" for="delivery">Delivery</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="delivery_type" id="pickup" value="pickup">
+                                    <label class="form-check-label" for="pickup">Pickup</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pickup Time Slots (hidden by default) -->
+                        <div id="pickup-options" class="row" style="display: none;">
+                            <div class="col-md-6 mb-3">
+                                <label for="pickup_date" class="form-label">Pickup Date</label>
+                                <input type="date" class="form-control" id="pickup_date" name="pickup_date" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="time_slot" class="form-label">Pickup Time</label>
+                                <select class="form-control" id="time_slot" name="time_slot">
+                                    <option value="">Select a time slot</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div id="delivery-address" class="checkout-section mb-4">
                         <h2 class="section-title">Delivery Address</h2>
                         <div class="row">
                             <div class="col-md-12 mb-3">
@@ -117,16 +148,19 @@
                                     <span>PKR {{ number_format($subtotal, 2) }}</span>
                                 </div>
 
-                                @if($selectedSector)
-                                <div class="d-flex justify-content-between mb-2">
+                                <div class="d-flex justify-content-between mb-2" id="delivery-cost-row">
+                                    @if($selectedSector)
                                     <span>Delivery to {{ $selectedSector['name'] }}:</span>
                                     <span>PKR {{ number_format($deliveryCharges, 2) }}</span>
+                                    @else
+                                    <span>Delivery:</span>
+                                    <span>PKR 0.00</span>
+                                    @endif
                                 </div>
-                                @endif
 
                                 <div class="d-flex justify-content-between fw-bold fs-5 mt-3 pt-3 border-top">
                                     <span>Total:</span>
-                                    <span>PKR {{ number_format($total, 2) }}</span>
+                                    <span id="total-price">PKR {{ number_format($total, 2) }}</span>
                                 </div>
                             </div>
 
@@ -221,4 +255,77 @@
         }
     }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deliveryRadio = document.getElementById('delivery');
+        const pickupRadio = document.getElementById('pickup');
+        const deliveryAddressSection = document.getElementById('delivery-address');
+        const pickupOptionsSection = document.getElementById('pickup-options');
+        const deliveryCostRow = document.getElementById('delivery-cost-row');
+        const totalPriceElement = document.getElementById('total-price');
+        const pickupDateInput = document.getElementById('pickup_date');
+        const timeSlotSelect = document.getElementById('time_slot');
+
+        // Initial subtotal
+        const subtotal = {{ $subtotal }};
+
+        // Toggle delivery/pickup options
+        function toggleDeliveryOptions() {
+            if (deliveryRadio.checked) {
+                deliveryAddressSection.style.display = 'block';
+                pickupOptionsSection.style.display = 'none';
+                deliveryCostRow.style.display = 'flex';
+
+                // Update total with delivery charges
+                const deliveryCharges = {{ $deliveryCharges }};
+                const total = subtotal + deliveryCharges;
+                totalPriceElement.textContent = 'PKR ' + total.toFixed(2);
+            } else {
+                deliveryAddressSection.style.display = 'none';
+                pickupOptionsSection.style.display = 'block';
+                deliveryCostRow.style.display = 'none';
+
+                // Update total without delivery charges
+                totalPriceElement.textContent = 'PKR ' + subtotal.toFixed(2);
+            }
+        }
+
+        deliveryRadio.addEventListener('change', toggleDeliveryOptions);
+        pickupRadio.addEventListener('change', toggleDeliveryOptions);
+
+        // Handle date change for time slots
+        pickupDateInput.addEventListener('change', function() {
+            const selectedDate = this.value;
+
+            // Clear current options
+            timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+
+            // Fetch new time slots
+            fetch(`{{ route('checkout.time_slots') }}?date=${selectedDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        data.forEach(slot => {
+                            const option = document.createElement('option');
+                            option.value = slot.value;
+                            option.textContent = slot.label;
+                            timeSlotSelect.appendChild(option);
+                        });
+                    } else {
+                        const option = document.createElement('option');
+                        option.value = '';
+                        option.textContent = 'No time slots available for this date';
+                        timeSlotSelect.appendChild(option);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching time slots:', error);
+                });
+        });
+    });
+
+    // Initialize
+    toggleDeliveryOptions();
+</script>
 @endsection

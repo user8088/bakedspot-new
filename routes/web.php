@@ -5,12 +5,14 @@ use App\Http\Controllers\Client\MasterController;
 use App\Http\Controllers\Client\ProductDetailController;
 use App\Http\Controllers\Client\OrderController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\PickupController;
 
 use App\Http\Controllers\Admin\AdminMasterController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\ProductManagmentController;
 use App\Http\Controllers\Admin\SectorManagmentController;
 use App\Http\Controllers\Admin\OrderManagementController;
+use App\Http\Controllers\Admin\TimeSlotController;
 
 
 
@@ -27,6 +29,13 @@ Route::controller(MasterController::class)->group(function () {
     Route::post('/save-sector', 'saveSectorSelection')->name('save.sector');
 });
 
+// Pickup Routes
+Route::controller(PickupController::class)->group(function () {
+    Route::get('/pickup/pack-menu', 'packMenu')->name('pickup-packmenupage');
+    Route::get('/pickup/timeslots', 'getTimeSlots')->name('pickup.time_slots');
+    Route::post('/pickup/select-timeslot', 'selectTimeSlot')->name('pickup.select_timeslot');
+});
+
 Route::controller(ProductDetailController::class)->group(function () {
     Route::get('/product-details/{id}', 'get_ProductDetailsPage')->name('get-productdetailspage');
 });
@@ -36,6 +45,7 @@ Route::controller(OrderController::class)->group(function () {
     Route::get('/checkout', 'showCheckout')->name('checkout.show');
     Route::post('/checkout/process', 'processCheckout')->name('checkout.process');
     Route::get('/checkout/success/{order_id}', 'checkoutSuccess')->name('checkout.success');
+    Route::get('/checkout/time-slots', 'getTimeSlots')->name('checkout.time_slots');
 });
 
 
@@ -59,7 +69,7 @@ Route::middleware(['web'])->group(function () {
 // Protected Routes
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::controller(AdminMasterController::class)->group(function () {
-        Route::get('/', 'get_dashboard')->name('get-admindashboard');
+        Route::get('/', 'get_dashboard')->name('admin.dashboard');
     });
 
     Route::controller(ProductManagmentController::class)->group(function () {
@@ -85,11 +95,16 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 
     // Order Management Routes
     Route::prefix('orders')->group(function () {
-        Route::get('', [OrderManagementController::class, 'get_ordersManagementPage'])->name('admin.orders.index');
-        Route::get('details/{order_id}', [OrderManagementController::class, 'get_orderDetails'])->name('admin.orders.show');
-        Route::post('update-status/{order_id}', [OrderManagementController::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
-        Route::delete('delete/{order_id}', [OrderManagementController::class, 'deleteOrder'])->name('admin.orders.delete');
-        Route::get('report', [OrderManagementController::class, 'getOrdersReport'])->name('admin.orders.report');
+        Route::get('', [OrderManagementController::class, 'index'])->name('admin.orders.index');
+        Route::get('details/{order_id}', [OrderManagementController::class, 'show'])->name('admin.orders.show');
+        Route::post('update-status/{order_id}', [OrderManagementController::class, 'updateStatus'])->name('admin.orders.updateStatus');
+        Route::delete('delete/{order_id}', [OrderManagementController::class, 'destroy'])->name('admin.orders.destroy');
+        Route::get('report', [OrderManagementController::class, 'generateReport'])->name('admin.orders.report');
+
+        // Time Slot Management Routes
+        Route::get('time-slots', [TimeSlotController::class, 'index'])->name('admin.time_slots.index');
+        Route::post('time-slots/update', [TimeSlotController::class, 'update'])->name('admin.time_slots.update');
+        Route::get('time-slots/preview', [TimeSlotController::class, 'preview'])->name('admin.time_slots.preview');
     });
 });
 

@@ -18,7 +18,13 @@
             @if($cartItems->isEmpty())
                 <p class="text-center">Your bag is empty.</p>
             @else
+                @php
+                    $subtotal = 0;
+                @endphp
                 @foreach($cartItems as $item)
+                    @php
+                        $subtotal += floatval($item->total_price);
+                    @endphp
                     <div class="row cart-item pb-3 pt-3 border-top" data-cart-id="{{ $item->id }}">
                         <div class="col-lg-3">
                             <img src="{{asset('images/pk-4.png')}}" class="img-fluid" alt="">
@@ -44,38 +50,68 @@
 
                         <div class="d-flex justify-content-between mt-3">
                             <span>Subtotal:</span>
-                            <span><b>PKR {{ number_format($cartItems->sum('total_price'), 2) }}</b></span>
+                            <span><b>PKR {{ number_format($subtotal, 2) }}</b></span>
                         </div>
 
-                        @if($selectedSector)
-                        <div class="d-flex justify-content-between mt-2">
-                            <span>Delivery to {{ $selectedSector['name'] }}:</span>
-                            <span><b>PKR {{ number_format($selectedSector['delivery_charges'], 2) }}</b></span>
-                        </div>
+                        @php
+                            $orderType = Session::get('order_type', 'delivery');
+                            $selectedSector = Session::get('selected_sector');
+                            $selectedTimeSlot = Session::get('selected_time_slot');
+                            $total = $subtotal;
+                        @endphp
+
+                        @if($orderType == 'delivery' && $selectedSector)
+                            <div class="d-flex justify-content-between mt-2">
+                                <span>Delivery to {{ $selectedSector['name'] }}:</span>
+                                <span><b>PKR {{ number_format($selectedSector['delivery_charges'], 2) }}</b></span>
+                            </div>
+                            @php
+                                $total += floatval($selectedSector['delivery_charges']);
+                            @endphp
+                        @elseif($orderType == 'pickup' && $selectedTimeSlot)
+                            <div class="d-flex justify-content-between mt-2">
+                                <span>Pickup:</span>
+                                <span class="text-success"><b>{{ $selectedTimeSlot['date'] }} at {{ $selectedTimeSlot['label'] }}</b></span>
+                            </div>
+                        @endif
 
                         <div class="d-flex justify-content-between mt-3">
                             <span class="fw-bold">Total:</span>
-                            <span class="fw-bold">PKR {{ number_format($cartItems->sum('total_price') + $selectedSector['delivery_charges'], 2) }}</span>
+                            <span class="fw-bold">PKR {{ number_format($total, 2) }}</span>
                         </div>
-                        @else
-                        <div class="alert alert-warning mt-3 py-2 small">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            Please <a href="{{ route('get-packmenupage') }}" class="alert-link">select a delivery area</a> to continue.
-                        </div>
+
+                        @if($orderType == 'delivery' && !$selectedSector)
+                            <div class="alert alert-warning mt-3 py-2 small">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Please <a href="{{ route('get-packmenupage') }}" class="alert-link">select a delivery area</a> to continue.
+                            </div>
+                        @elseif($orderType == 'pickup' && !$selectedTimeSlot)
+                            <div class="alert alert-warning mt-3 py-2 small">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Please <a href="{{ route('pickup-packmenupage') }}" class="alert-link">select a pickup time</a> to continue.
+                            </div>
                         @endif
                     </div>
                 </div>
             @endif
         </div>
         <div class="mt-4">
-            @if(!$cartItems->isEmpty())
-                @if($selectedSector)
+            @if(isset($cartItems) && count($cartItems) > 0)
+                @php
+                    $orderType = Session::get('order_type', 'delivery');
+                    $selectedSector = Session::get('selected_sector');
+                    $selectedTimeSlot = Session::get('selected_time_slot');
+                @endphp
+
+                @if(($orderType == 'delivery' && $selectedSector) || ($orderType == 'pickup' && $selectedTimeSlot))
                     <a href="{{ route('checkout.show') }}" class="btn btn-main w-100">Proceed to Checkout</a>
-                @else
+                @elseif($orderType == 'delivery')
                     <a href="{{ route('get-packmenupage') }}" class="btn btn-main w-100">Select Delivery Area</a>
+                @else
+                    <a href="{{ route('pickup-packmenupage') }}" class="btn btn-main w-100">Select Pickup Time</a>
                 @endif
             @else
-                <a href="{{ route('get-packmenupage') }}" class="btn btn-main w-100">Order Now</a>
+                <a href="{{ route('start-order') }}" class="btn btn-main w-100">Order Now</a>
             @endif
         </div>
     </div>

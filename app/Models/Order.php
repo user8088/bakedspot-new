@@ -22,6 +22,7 @@ class Order extends Model
         'delivery_notes',
         'payment_method',
         'sector_id',
+        'time_slot_id',
         'delivery_charges',
         'subtotal',
         'total',
@@ -38,8 +39,18 @@ class Order extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     public function sector()
     {
         return $this->belongsTo(Sector::class);
+    }
+
+    public function timeSlot()
+    {
+        return $this->belongsTo(TimeSlot::class);
     }
 }

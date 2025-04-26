@@ -16,12 +16,14 @@
                 </a>
             </div>
             <div class="col-lg-6 mb-4">
+                <a href="{{route('pickup-packmenupage')}}">
                 <div class="card order-card shadow">
                     <img src="{{ asset('images/sectors.png') }}" width="100" alt="Pickup" class="card-img-top">
                     <div class="card-body text-center">
                         <h2 class="card-title fw-bold">Pick Up</h2>
                     </div>
                 </div>
+                </a>
             </div>
         </div>
     </div>

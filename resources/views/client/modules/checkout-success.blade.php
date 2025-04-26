@@ -24,7 +24,7 @@
                         </div>
                         <div class="col-md-6">
                             <h5>Payment Information</h5>
-                            <p class="mb-1">Method: Cash on Delivery</p>
+                            <p class="mb-1">Method: Online Payment on Delivery</p>
                             <p class="mb-1">Status: {{ ucfirst($order->status) }}</p>
                             <p class="mb-0">Total: PKR {{ number_format($order->total, 2) }}</p>
                         </div>
@@ -62,7 +62,7 @@
 
             <div class="text-center mb-4">
                 <p>You will receive an email confirmation shortly at <strong>{{ $order->email }}</strong></p>
-                <p class="text-note">Please make sure you have cash ready for payment upon delivery.</p>
+                <p class="text-note">Please make sure you have online payment ready upon delivery.</p>
             </div>
 
             <div class="text-center">

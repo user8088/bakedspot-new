@@ -4,6 +4,38 @@
 <section class="pack8">
     <div class="container pt-0 pt-md-5 pb-0 pb-md-5">
         <div class="row">
+            <!-- Top Section for Time Slot Selection -->
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="heading-black-small mb-3">Select Pickup Time</h3>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="pickup_date" class="form-label">Pickup Date</label>
+                                <input type="date" class="form-control" id="pickup_date" name="pickup_date" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="time_slot" class="form-label">Pickup Time</label>
+                                <select class="form-select" id="time_slot" name="time_slot">
+                                    <option value="">Select a time slot</option>
+                                    @foreach($timeSlots as $slot)
+                                        <option value="{{ $slot['value'] }}" data-label="{{ $slot['label'] }}">{{ $slot['label'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-center" id="time-slot-selected" style="display: none;">
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-2"></i> Pickup time selected: <span id="selected-time-text"></span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" id="select-time-btn" class="btn btn-main">Select Time Slot</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Pink Container -->
             <div class="col-lg-6 pack-background position-relative">
                 <div class="container-box" id="selected-items-container">
@@ -61,10 +93,102 @@
     document.addEventListener('DOMContentLoaded', function () {
         const container = document.getElementById('selected-items-container');
         const addToBagButton = document.getElementById('add-to-bag');
-        const form = document.getElementById('cart-form');
+        const selectTimeBtn = document.getElementById('select-time-btn');
+        const pickupDateInput = document.getElementById('pickup_date');
+        const timeSlotSelect = document.getElementById('time_slot');
+        const timeSlotSelectedDiv = document.getElementById('time-slot-selected');
+        const selectedTimeText = document.getElementById('selected-time-text');
+
         let totalPrice = 0;
         let totalSelected = 0;
         let selectedItems = {};
+        let timeSlotSelected = false;
+
+        // Check if time slot is already selected in session
+        @if(Session::has('selected_time_slot'))
+            timeSlotSelected = true;
+            timeSlotSelectedDiv.style.display = 'block';
+            selectedTimeText.textContent = "{{ Session::get('selected_time_slot.date') }} at {{ Session::get('selected_time_slot.label') }}";
+        @endif
+
+        // Date change handler - fetch available time slots
+        pickupDateInput.addEventListener('change', function() {
+            const date = this.value;
+
+            // Clear current options
+            while (timeSlotSelect.options.length > 1) {
+                timeSlotSelect.remove(1);
+            }
+
+            // Add loading option
+            const loadingOption = document.createElement('option');
+            loadingOption.text = 'Loading time slots...';
+            loadingOption.disabled = true;
+            timeSlotSelect.add(loadingOption);
+
+            // Fetch new time slots
+            fetch(`/pickup/timeslots?date=${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Remove loading option
+                    timeSlotSelect.remove(1);
+
+                    // Add new options
+                    data.forEach(slot => {
+                        const option = document.createElement('option');
+                        option.value = slot.value;
+                        option.text = slot.label;
+                        option.dataset.label = slot.label;
+                        timeSlotSelect.add(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching time slots:', error);
+                    showToast('Failed to load time slots', 'error');
+                });
+        });
+
+        // Time slot selection
+        selectTimeBtn.addEventListener('click', function() {
+            const date = pickupDateInput.value;
+            const timeSlot = timeSlotSelect.value;
+            const timeSlotLabel = timeSlotSelect.options[timeSlotSelect.selectedIndex].dataset.label;
+
+            if (!date || !timeSlot) {
+                showToast('Please select both date and time slot', 'error');
+                return;
+            }
+
+            // Save time slot selection via AJAX
+            fetch('/pickup/select-timeslot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    date: date,
+                    time_slot: timeSlot,
+                    time_slot_label: timeSlotLabel
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    timeSlotSelected = true;
+                    timeSlotSelectedDiv.style.display = 'block';
+                    selectedTimeText.textContent = `${date} at ${timeSlotLabel}`;
+                    showToast('Time slot selected successfully');
+                    updateButton();
+                } else {
+                    showToast(data.message || 'Failed to select time slot', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error selecting time slot:', error);
+                showToast('Failed to select time slot', 'error');
+            });
+        });
 
         function updateSelectedImages(id, name, imageSrc, isAdding) {
             if (isAdding) {
@@ -81,13 +205,17 @@
             }
         }
 
+        // Your original button update logic modified to check time slot selection
         function updateButton() {
             let remaining = 8 - totalSelected;
-
-            if (remaining === 0) {
+            if (remaining === 0 && timeSlotSelected) {
                 addToBagButton.innerText = `Add to Bag - PKR ${totalPrice.toFixed(2)}`;
                 addToBagButton.style.opacity = '1';
                 addToBagButton.style.pointerEvents = 'auto';
+            } else if (remaining === 0 && !timeSlotSelected) {
+                addToBagButton.innerText = `Select Time Slot - PKR ${totalPrice.toFixed(2)}`;
+                addToBagButton.style.opacity = '0.5';
+                addToBagButton.style.pointerEvents = 'none';
             } else {
                 addToBagButton.innerText = `Add ${remaining} More - PKR ${totalPrice.toFixed(2)}`;
                 addToBagButton.style.opacity = '0.5';
@@ -153,10 +281,10 @@
             });
         });
 
-        addToBagButton.addEventListener('click', function (e) {
+        addToBagButton.addEventListener('click', function(e) {
             e.preventDefault();
 
-            if (totalSelected !== 8) return; // Safety check
+            if (totalSelected !== 8 || !timeSlotSelected) return; // Safety check
 
             const form = document.getElementById('cart-form');
 
@@ -314,7 +442,7 @@
                     </div>`;
                 });
 
-                // Add order summary
+                // Add order summary with time slot information
                 html += `
                 <div class="row mt-4">
                     <div class="col-12">
@@ -326,26 +454,24 @@
                             <span><b>PKR ${subtotal.toFixed(2)}</b></span>
                         </div>`;
 
-                // Add delivery info if sector is selected
-                if (response.selected_sector) {
-                    const deliveryCharges = parseFloat(response.selected_sector.delivery_charges);
-                    const total = subtotal + deliveryCharges;
-
+                // Add pickup info if time slot is selected
+                const selectedTimeSlot = @json(Session::get('selected_time_slot'));
+                if (selectedTimeSlot) {
                     html += `
                     <div class="d-flex justify-content-between mt-2">
-                        <span>Delivery to ${response.selected_sector.name}:</span>
-                        <span><b>PKR ${deliveryCharges.toFixed(2)}</b></span>
+                        <span>Pickup:</span>
+                        <span class="text-success"><b>${selectedTimeSlot.date} at ${selectedTimeSlot.label}</b></span>
                     </div>
 
                     <div class="d-flex justify-content-between mt-3">
                         <span class="fw-bold">Total:</span>
-                        <span class="fw-bold">PKR ${total.toFixed(2)}</span>
+                        <span class="fw-bold">PKR ${subtotal.toFixed(2)}</span>
                     </div>`;
                 } else {
                     html += `
                     <div class="alert alert-warning mt-3 py-2 small">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        Please <a href="{{ route('get-packmenupage') }}" class="alert-link">select a delivery area</a> to continue.
+                        Please <a href="{{ route('pickup-packmenupage') }}" class="alert-link">select a pickup time</a> to continue.
                     </div>`;
                 }
 
@@ -362,13 +488,14 @@
             if (checkoutBtnContainer) {
                 let checkoutBtn = '';
                 if (response.cartItems && response.cartItems.length > 0) {
-                    if (response.selected_sector) {
+                    const selectedTimeSlot = @json(Session::get('selected_time_slot'));
+                    if (selectedTimeSlot) {
                         checkoutBtn = '<a href="{{ route("checkout.show") }}" class="btn btn-main w-100">Proceed to Checkout</a>';
                     } else {
-                        checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Select Delivery Area</a>';
+                        checkoutBtn = '<a href="{{ route("pickup-packmenupage") }}" class="btn btn-main w-100">Select Pickup Time</a>';
                     }
                 } else {
-                    checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Order Now</a>';
+                    checkoutBtn = '<a href="{{ route("pickup-packmenupage") }}" class="btn btn-main w-100">Order Now</a>';
                 }
                 checkoutBtnContainer.innerHTML = checkoutBtn;
             }
@@ -386,4 +513,58 @@
     });
 </script>
 
+<style>
+    .pack-background {
+        background-color: #ffb6c1;
+        min-height: 400px;
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .container-box {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .selected-img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        background-color: white;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    .btn-order {
+        background-color: #ff6b81;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-weight: bold;
+    }
+
+    .btn-order:hover {
+        background-color: #ff4757;
+        color: white;
+    }
+
+    .btn-main {
+        background-color: #ff6b81;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-weight: bold;
+    }
+
+    .btn-main:hover {
+        background-color: #ff4757;
+        color: white;
+    }
+</style>
 @endsection

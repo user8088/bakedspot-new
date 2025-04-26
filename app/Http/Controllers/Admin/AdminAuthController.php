@@ -31,7 +31,7 @@ class AdminAuthController extends Controller
 
             Auth::login($admin);
 
-            return redirect()->route('get-admindashboard')->with('success', 'Welcome Admin!');
+            return redirect()->route('admin.dashboard')->with('success', 'Welcome Admin!');
         }
 
         return back()->with('error', 'Invalid credentials.');
