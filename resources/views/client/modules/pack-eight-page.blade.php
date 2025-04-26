@@ -360,7 +360,7 @@
                 let checkoutBtn = '';
                 if (response.cartItems && response.cartItems.length > 0) {
                     if (response.selected_sector) {
-                        checkoutBtn = '<a href="#" class="btn btn-main w-100">Proceed to Checkout</a>';
+                        checkoutBtn = '<a href="{{ route("checkout.show") }}" class="btn btn-main w-100">Proceed to Checkout</a>';
                     } else {
                         checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Select Delivery Area</a>';
                     }

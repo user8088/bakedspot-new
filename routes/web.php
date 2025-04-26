@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminMasterController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\ProductManagmentController;
 use App\Http\Controllers\Admin\SectorManagmentController;
+use App\Http\Controllers\Admin\OrderManagementController;
 
 
 
@@ -32,6 +33,9 @@ Route::controller(ProductDetailController::class)->group(function () {
 
 Route::controller(OrderController::class)->group(function () {
     Route::get('/start-order', 'start_order')->name('start-order');
+    Route::get('/checkout', 'showCheckout')->name('checkout.show');
+    Route::post('/checkout/process', 'processCheckout')->name('checkout.process');
+    Route::get('/checkout/success/{order_id}', 'checkoutSuccess')->name('checkout.success');
 });
 
 
@@ -77,6 +81,15 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
                     Route::delete('/delete-sector/{id}','deleteSector')->name('delete-sector');
             });
         });
+    });
+
+    // Order Management Routes
+    Route::prefix('orders')->group(function () {
+        Route::get('', [OrderManagementController::class, 'get_ordersManagementPage'])->name('admin.orders.index');
+        Route::get('details/{order_id}', [OrderManagementController::class, 'get_orderDetails'])->name('admin.orders.show');
+        Route::post('update-status/{order_id}', [OrderManagementController::class, 'updateOrderStatus'])->name('admin.orders.updateStatus');
+        Route::delete('delete/{order_id}', [OrderManagementController::class, 'deleteOrder'])->name('admin.orders.delete');
+        Route::get('report', [OrderManagementController::class, 'getOrdersReport'])->name('admin.orders.report');
     });
 });
 
