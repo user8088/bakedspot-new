@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Client\MasterController;
 use App\Http\Controllers\Client\ProductDetailController;
 use App\Http\Controllers\Client\OrderController;
@@ -106,5 +107,13 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         Route::post('time-slots/update', [TimeSlotController::class, 'update'])->name('admin.time_slots.update');
         Route::get('time-slots/preview', [TimeSlotController::class, 'preview'])->name('admin.time_slots.preview');
     });
+});
+
+// Cache clearing route
+Route::get('/clear-cache', function() {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    return "Cache cleared successfully!";
 });
 

@@ -2,13 +2,6 @@
 
 @section('page')
 <div class="col-lg-10 col-12 ps-lg-5 pt-3 p-3">
-    <h1 class="mt-4">Orders Report</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('admin.orders.index') }}">Orders</a></li>
-        <li class="breadcrumb-item active">Report</li>
-    </ol>
-
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <div>
@@ -19,14 +12,14 @@
                 <a href="{{ route('admin.orders.report') }}?start_date={{ $start_date }}&end_date={{ $end_date }}&status={{ $status }}&download=pdf" class="btn btn-sm btn-outline-danger">
                     <i class="fas fa-file-pdf me-1"></i> Download PDF
                 </a>
-                <a href="{{ route('admin.orders.report') }}?start_date={{ $start_date }}&end_date={{ $end_date }}&status={{ $status }}&format=csv" class="btn btn-sm btn-outline-success">
+                {{-- <a href="{{ route('admin.orders.report') }}?start_date={{ $start_date }}&end_date={{ $end_date }}&status={{ $status }}&format=csv" class="btn btn-sm btn-outline-success">
                     <i class="fas fa-file-csv me-1"></i> Download CSV
-                </a>
+                </a> --}}
             </div>
         </div>
         <div class="card-body">
             <div class="row mb-4">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <form action="{{ route('admin.orders.report') }}" method="GET" class="row g-3">
                         <div class="col-md-3">
                             <label for="start_date" class="form-label">Start Date</label>
@@ -51,22 +44,22 @@
                         </div>
                     </form>
                 </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="card bg-primary text-white mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Total Orders</h5>
-                                    <p class="display-4">{{ $totalOrders }}</p>
-                                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card bg-primary text-white mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Orders</h5>
+                                <p class="display-4">{{ $totalOrders }}</p>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="card bg-success text-white mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Revenue</h5>
-                                    <p class="display-4">${{ number_format($totalRevenue, 2) }}</p>
-                                </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card bg-success text-white mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">Revenue</h5>
+                                <p class="display-4">PKR.{{ number_format($totalRevenue, 2) }}</p>
                             </div>
                         </div>
                     </div>
@@ -133,11 +126,11 @@
                                 <span class="fw-bold">#{{ $order->id }}</span>
                             </td>
                             <td>
-                                {{ $order->user->name ?? 'Guest' }}
-                                <div class="small text-muted">{{ $order->user->email ?? 'No email' }}</div>
+                                {{ $order->name ?? 'Guest' }}
+                                <div class="small text-muted">{{ $order->email ?? 'No email' }}</div>
                             </td>
                             <td>{{ $order->created_at->format('M d, Y') }}</td>
-                            <td>${{ number_format($order->total_amount, 2) }}</td>
+                            <td>PKR {{ number_format($order->total, 2) }}</td>
                             <td>
                                 <span class="badge bg-{{
                                     $order->status == 'completed' ? 'success' :

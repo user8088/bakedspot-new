@@ -15,8 +15,8 @@
                 <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
                     <i class="fas fa-filter me-1"></i> Filter
                 </button>
-                <a href="{{ route('admin.orders.report') }}?start_date={{ date('Y-m-d', strtotime('-30 days')) }}&end_date={{ date('Y-m-d') }}&status=all" class="btn btn-sm btn-outline-success">
-                    <i class="fas fa-file-excel me-1"></i> Generate Report
+                <a href="{{ route('admin.orders.report') }}" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-file-pdf me-1"></i> Generate Report
                 </a>
             </div>
         </div>

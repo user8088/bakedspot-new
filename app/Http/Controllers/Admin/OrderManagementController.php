@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\TimeSlot;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -125,25 +125,31 @@ class OrderManagementController extends Controller
      */
     public function generateReport(Request $request)
     {
+        // Set default values if not provided
+        $start_date = $request->start_date ?? date('Y-m-d', strtotime('-30 days'));
+        $end_date = $request->end_date ?? date('Y-m-d');
+        $status = $request->status ?? 'all';
+
+        // Validate request
         $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'status' => 'required|in:all,pending,processing,completed,cancelled',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'status' => 'nullable|in:all,pending,processing,completed,cancelled',
         ]);
 
         $query = Order::with(['user', 'orderItems.product', 'timeSlot'])
-            ->whereDate('created_at', '>=', $request->start_date)
-            ->whereDate('created_at', '<=', $request->end_date);
+            ->whereDate('created_at', '>=', $start_date)
+            ->whereDate('created_at', '<=', $end_date);
 
-        if ($request->status != 'all') {
-            $query->where('status', $request->status);
+        if ($status != 'all') {
+            $query->where('status', $status);
         }
 
         $orders = $query->orderBy('created_at', 'desc')->get();
 
         // Calculate totals
         $totalOrders = $orders->count();
-        $totalRevenue = $orders->sum('total_amount');
+        $totalRevenue = $orders->where('payment_status', 1)->sum('total');
 
         // Group orders by status
         $ordersByStatus = [
@@ -155,7 +161,7 @@ class OrderManagementController extends Controller
 
         // For PDF Download
         if ($request->has('download') && $request->download == 'pdf') {
-            $pdf = PDF::loadView('admin.orders.report', compact(
+            $pdf = Pdf::loadView('admin.orders.report', compact(
                 'orders',
                 'start_date',
                 'end_date',
