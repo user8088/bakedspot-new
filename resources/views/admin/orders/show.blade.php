@@ -3,7 +3,7 @@
 @section('page')
 <div class="col-lg-10 col-12 ps-lg-5 pt-3 p-3">
 
-    @if(session('success'))
+    {{-- @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -15,7 +15,7 @@
         {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-    @endif
+    @endif --}}
 
     <div class="row">
         <!-- Order Info -->
@@ -39,7 +39,7 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Product</th>
+                                    <th>Pack</th>
                                     <th class="text-center">Price</th>
                                     <th class="text-center">Quantity</th>
                                     <th class="text-end">Subtotal</th>
@@ -50,22 +50,178 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            @if($item->product && $item->product->image)
-                                                <img src="{{ asset('storage/' . $item->product->image) }}" alt="{{ $item->product->name }}" class="img-thumbnail me-2" style="width: 50px; height: 50px; object-fit: cover;">
-                                            @else
-                                                <div class="bg-light me-2" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
-                                                    <i class="fas fa-image text-muted"></i>
-                                                </div>
-                                            @endif
+                                            @php
+                                                $packImage = 'images/pk-4.png';
+                                                if (strpos($item->pack_type, '8') !== false) {
+                                                    $packImage = 'images/pk-8.png';
+                                                }
+                                            @endphp
+                                            <img src="{{ asset($packImage) }}" class="img-thumbnail me-2" style="width: 50px; height: 50px; object-fit: cover;" alt="{{ $item->pack_type }}">
                                             <div>
-                                                <h6 class="mb-0">{{ $item->product->name ?? 'Product Not Available' }}</h6>
-                                                <small class="text-muted">SKU: {{ $item->product->sku ?? 'N/A' }}</small>
+                                                <h6 class="mb-0">{{ $item->pack_type }}</h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-center">PKR.{{ number_format($item->price, 2) }}</td>
                                     <td class="text-center">{{ $item->quantity }}</td>
                                     <td class="text-end">PKR.{{ number_format($item->price * $item->quantity, 2) }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="bg-light">
+                                        <div class="small">
+                                            <strong>Pack Items:</strong>
+                                            <ul class="list-unstyled mb-0 ps-3 pt-1">
+                                                @php
+                                                    $productDetails = [];
+                                                    if($item->item_1) {
+                                                        $product1 = App\Models\Product::with('images')->find($item->item_1);
+                                                        if($product1) {
+                                                            $productDetails[] = [
+                                                                'name' => $product1->name,
+                                                                'image' => $product1->images->isNotEmpty() ? $product1->images->first()->pack_image_url : null,
+                                                                'id' => $product1->id
+                                                            ];
+                                                        } else {
+                                                            $productDetails[] = [
+                                                                'name' => 'Product #' . $item->item_1,
+                                                                'image' => null,
+                                                                'id' => $item->item_1
+                                                            ];
+                                                        }
+                                                    }
+                                                    if($item->item_2) {
+                                                        $product2 = App\Models\Product::with('images')->find($item->item_2);
+                                                        if($product2) {
+                                                            $productDetails[] = [
+                                                                'name' => $product2->name,
+                                                                'image' => $product2->images->isNotEmpty() ? $product2->images->first()->pack_image_url : null,
+                                                                'id' => $product2->id
+                                                            ];
+                                                        } else {
+                                                            $productDetails[] = [
+                                                                'name' => 'Product #' . $item->item_2,
+                                                                'image' => null,
+                                                                'id' => $item->item_2
+                                                            ];
+                                                        }
+                                                    }
+                                                    if($item->item_3) {
+                                                        $product3 = App\Models\Product::with('images')->find($item->item_3);
+                                                        if($product3) {
+                                                            $productDetails[] = [
+                                                                'name' => $product3->name,
+                                                                'image' => $product3->images->isNotEmpty() ? $product3->images->first()->pack_image_url : null,
+                                                                'id' => $product3->id
+                                                            ];
+                                                        } else {
+                                                            $productDetails[] = [
+                                                                'name' => 'Product #' . $item->item_3,
+                                                                'image' => null,
+                                                                'id' => $item->item_3
+                                                            ];
+                                                        }
+                                                    }
+                                                    if($item->item_4) {
+                                                        $product4 = App\Models\Product::with('images')->find($item->item_4);
+                                                        if($product4) {
+                                                            $productDetails[] = [
+                                                                'name' => $product4->name,
+                                                                'image' => $product4->images->isNotEmpty() ? $product4->images->first()->pack_image_url : null,
+                                                                'id' => $product4->id
+                                                            ];
+                                                        } else {
+                                                            $productDetails[] = [
+                                                                'name' => 'Product #' . $item->item_4,
+                                                                'image' => null,
+                                                                'id' => $item->item_4
+                                                            ];
+                                                        }
+                                                    }
+                                                    if($item->item_5) {
+                                                        $product5 = App\Models\Product::with('images')->find($item->item_5);
+                                                        if($product5) {
+                                                            $productDetails[] = [
+                                                                'name' => $product5->name,
+                                                                'image' => $product5->images->isNotEmpty() ? $product5->images->first()->pack_image_url : null,
+                                                                'id' => $product5->id
+                                                            ];
+                                                        } else {
+                                                            $productDetails[] = [
+                                                                'name' => 'Product #' . $item->item_5,
+                                                                'image' => null,
+                                                                'id' => $item->item_5
+                                                            ];
+                                                        }
+                                                    }
+                                                    if($item->item_6) {
+                                                        $product6 = App\Models\Product::with('images')->find($item->item_6);
+                                                        if($product6) {
+                                                            $productDetails[] = [
+                                                                'name' => $product6->name,
+                                                                'image' => $product6->images->isNotEmpty() ? $product6->images->first()->pack_image_url : null,
+                                                                'id' => $product6->id
+                                                            ];
+                                                        } else {
+                                                            $productDetails[] = [
+                                                                'name' => 'Product #' . $item->item_6,
+                                                                'image' => null,
+                                                                'id' => $item->item_6
+                                                            ];
+                                                        }
+                                                    }
+                                                    if($item->item_7) {
+                                                        $product7 = App\Models\Product::with('images')->find($item->item_7);
+                                                        if($product7) {
+                                                            $productDetails[] = [
+                                                                'name' => $product7->name,
+                                                                'image' => $product7->images->isNotEmpty() ? $product7->images->first()->pack_image_url : null,
+                                                                'id' => $product7->id
+                                                            ];
+                                                        } else {
+                                                            $productDetails[] = [
+                                                                'name' => 'Product #' . $item->item_7,
+                                                                'image' => null,
+                                                                'id' => $item->item_7
+                                                            ];
+                                                        }
+                                                    }
+                                                    if($item->item_8) {
+                                                        $product8 = App\Models\Product::with('images')->find($item->item_8);
+                                                        if($product8) {
+                                                            $productDetails[] = [
+                                                                'name' => $product8->name,
+                                                                'image' => $product8->images->isNotEmpty() ? $product8->images->first()->pack_image_url : null,
+                                                                'id' => $product8->id
+                                                            ];
+                                                        } else {
+                                                            $productDetails[] = [
+                                                                'name' => 'Product #' . $item->item_8,
+                                                                'image' => null,
+                                                                'id' => $item->item_8
+                                                            ];
+                                                        }
+                                                    }
+                                                @endphp
+
+                                                @foreach($productDetails as $product)
+                                                    <li class="mb-2 d-flex align-items-center">
+                                                        @if($product['image'])
+                                                            <img src="{{ asset($product['image']) }}" alt="{{ $product['name'] }}" class="img-thumbnail me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                                        @else
+                                                            <div class="bg-light me-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 4px;">
+                                                                <i class="fas fa-image text-muted"></i>
+                                                            </div>
+                                                        @endif
+                                                        <span style="font-size: 14px;">{{ $product['name'] }}</span>
+                                                    </li>
+                                                @endforeach
+
+                                                @if(empty($productDetails))
+                                                    <li style="font-size: 14px;">No pack items specified</li>
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -186,7 +342,7 @@
 </div>
 
 <!-- Delete Order Modal -->
-<div class="modal fade" id="deleteOrderModal" tabindex="-1" aria-labelledby="deleteOrderModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteOrderModal" tabindex="-1" aria-labelledby="deleteOrderModalLabel" aria-hidden="true" data-bs-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

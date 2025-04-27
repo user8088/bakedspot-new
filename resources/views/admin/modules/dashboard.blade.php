@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-10 col-lg-10 col-md-10">
                         <h6>Orders Today</h6>
-                        <h2>80</h2>
+                        <h2>{{ $todayOrders }}</h2>
                     </div>
                     <div class="col-2 col-lg-2 col-md-2 d-flex justify-content-center align-items-center">
                         <img alt="Logo" width="50" src="{{asset("icons/order-icon.png")}}" />
@@ -20,7 +20,7 @@
                 <div class="row">
                     <div class="col-10 col-lg-10 col-md-10">
                         <h6>Total Sales</h6>
-                        <h2>80</h2>
+                        <h2>{{ $totalSales }}</h2>
                     </div>
                     <div class="col-2 col-lg-2 col-md-2 d-flex justify-content-center align-items-center">
                         <img alt="Logo" width="50" src="{{asset("icons/sold-icon.png")}}" />
@@ -33,7 +33,7 @@
                 <div class="row">
                     <div class="col-10 col-lg-10 col-md-10">
                         <h6>Total Users</h6>
-                        <h2>80</h2>
+                        <h2>{{ $totalUsers }}</h2>
                     </div>
                     <div class="col-2 col-lg-2 col-md-2 d-flex justify-content-center align-items-center">
                         <img alt="Logo" width="50" src="{{asset("icons/user-icon.png")}}" />

@@ -21,6 +21,7 @@ class Order extends Model
         'postal_code',
         'delivery_notes',
         'payment_method',
+        'payment_status',
         'sector_id',
         'time_slot_id',
         'delivery_charges',
