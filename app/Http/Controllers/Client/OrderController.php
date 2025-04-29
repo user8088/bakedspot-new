@@ -120,6 +120,7 @@ class OrderController extends Controller
                 'postal_code' => $validated['zip'] ?? null,
                 'delivery_notes' => $validated['notes'] ?? null,
                 'payment_method' => $validated['payment_method'],
+                'payment_status' => false, // Set payment status as unpaid for COD
                 'sector_id' => $sectorId,
                 'time_slot_id' => $timeSlotId,
                 'delivery_charges' => $deliveryCharges,

@@ -15,8 +15,8 @@ use App\Http\Controllers\Admin\SectorManagmentController;
 use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\TimeSlotController;
 
-
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 Route::get('/', function () {
     return view('client.modules.home');
@@ -115,5 +115,44 @@ Route::get('/clear-cache', function() {
     Artisan::call('cache:clear');
     Artisan::call('view:clear');
     return "Cache cleared successfully!";
+});
+
+// Diagnostic route
+Route::get('/diagnostic', function() {
+    try {
+        // Check database connection
+        $connection = DB::connection()->getPdo();
+        $connection_status = "Connected successfully to database: " . DB::connection()->getDatabaseName();
+
+        // Check tables
+        $tables_exist = [
+            'orders' => Schema::hasTable('orders'),
+            'order_items' => Schema::hasTable('order_items'),
+            'carts' => Schema::hasTable('carts'),
+            'time_slots' => Schema::hasTable('time_slots'),
+            'sectors' => Schema::hasTable('sectors')
+        ];
+
+        // Check Order model columns
+        $order_columns = Schema::getColumnListing('orders');
+
+        // Attempt to create a test model
+        $test_order = new App\Models\Order();
+        $fillable_fields = $test_order->getFillable();
+
+        return response()->json([
+            'connection' => $connection_status,
+            'tables_exist' => $tables_exist,
+            'order_columns' => $order_columns,
+            'order_fillable_fields' => $fillable_fields,
+            'php_version' => PHP_VERSION,
+            'laravel_version' => app()->version()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ], 500);
+    }
 });
 

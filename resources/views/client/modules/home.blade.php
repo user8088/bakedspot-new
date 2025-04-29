@@ -67,38 +67,27 @@
         </div>
     </section>
 
+
     {{-- Mobile Product Section --}}
     <section class="content-section-mobile d-block d-md-none">
-        <div class="container pb-4">
-            <h1 class="secondaryheading-mobile pt-3">Our Yummers</h1>
+        <div class="container-fluid px-0">
+            <h1 class="flavor-heading px-3">Our Yummers</h1>
             @foreach ($products as $product)
-                @if($loop->index % 2 == 0)
-                    <!-- Layout for even-indexed products -->
-                    <div class="row g-2 pt-4">
-                        <div class="col-6">
+                <div class="mobile-product-item {{ $loop->index % 2 == 0 ? 'image-left' : 'image-right' }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="product-image-wrapper">
                             @if($product->images->first()?->home_image_url)
-                                <img src="{{ asset($product->images->first()->home_image_url) }}" class="img-fluid" alt="Product Image">
+                                <img src="{{ asset($product->images->first()->home_image_url) }}" class="product-image" alt="{{ $product->name }}">
                             @endif
                         </div>
-                        <div class="col-6">
-                            <h1 class="mobile-product-heading pt-3">{{ $product->name }}</h1>
-                            <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2" style="color: #000">Learn More</a>
+                        <div class="product-info ">
+                            <h2 class="product-name">{{ $product->name }}</h2>
+                            <a href="{{ route('get-productdetailspage', $product->id) }}" class="learn-more">
+                                Learn More <i class="fas fa-chevron-right"></i>
+                            </a>
                         </div>
                     </div>
-                @else
-                    <!-- Layout for odd-indexed products (switches order of image and text) -->
-                    <div class="row g-2 pt-4">
-                        <div class="col-6">
-                            <h1 class="mobile-product-heading pt-3">{{ $product->name }}</h1>
-                            <a href="{{ route('get-productdetailspage', $product->id) }}" class="btn btn-outline-light me-2" style="color: #000">Learn More</a>
-                        </div>
-                        <div class="col-6">
-                            @if($product->images->first()?->home_image_url)
-                                <img src="{{ asset($product->images->first()->home_image_url) }}" class="img-fluid" alt="Product Image">
-                            @endif
-                        </div>
-                    </div>
-                @endif
+                </div>
             @endforeach
         </div>
     </section>
