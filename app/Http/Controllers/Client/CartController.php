@@ -94,16 +94,20 @@ class CartController extends Controller
         $sessionId = Session::getId();
         $cartItems = Cart::where('session_id', $sessionId)->get();
         $selectedSector = session('selected_sector');
+        $orderType = Session::get('order_type', 'delivery');
+        $selectedTimeSlot = Session::get('selected_time_slot');
 
         // For AJAX requests, return JSON data
         if (request()->ajax()) {
             return response()->json([
                 'success' => true,
                 'cartItems' => $cartItems,
+                'order_type' => $orderType,
                 'selected_sector' => $selectedSector,
+                'selected_time_slot' => $selectedTimeSlot,
                 'cart_count' => $cartItems->count(),
                 'subtotal' => $cartItems->sum('total_price'),
-                'total' => $cartItems->sum('total_price') + ($selectedSector ? $selectedSector['delivery_charges'] : 0)
+                'total' => $cartItems->sum('total_price') + ($orderType == 'delivery' && $selectedSector ? $selectedSector['delivery_charges'] : 0)
             ]);
         }
 

@@ -81,7 +81,7 @@
                             @endif
                         </div>
                         <div class="product-info ">
-                            <h2 class="product-name">{{ $product->name }}</h2>
+                            <h2 class="product-name {{ $loop->index % 2 == 0 ? 'text-start' : 'text-end' }}">{{ $product->name }}</h2>
                             <a href="{{ route('get-productdetailspage', $product->id) }}" class="learn-more">
                                 Learn More <i class="fas fa-chevron-right"></i>
                             </a>

@@ -33,6 +33,7 @@ Route::controller(MasterController::class)->group(function () {
 // Pickup Routes
 Route::controller(PickupController::class)->group(function () {
     Route::get('/pickup/pack-menu', 'packMenu')->name('pickup-packmenupage');
+    Route::get('/pickup/time-selection', 'showTimeSelection')->name('pickup.time_selection');
     Route::get('/pickup/timeslots', 'getTimeSlots')->name('pickup.time_slots');
     Route::post('/pickup/select-timeslot', 'selectTimeSlot')->name('pickup.select_timeslot');
 });

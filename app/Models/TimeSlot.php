@@ -87,29 +87,31 @@ class TimeSlot extends Model
     {
         $settings = self::first() ?? new self();
 
-        $startTime = strtotime($settings->start_time);
-        $endTime = strtotime($settings->end_time);
-        $interval = $settings->interval_minutes * 60; // Convert to seconds
-
-        $currentTime = time();
-        $selectedDate = strtotime($date);
-        $isToday = date('Y-m-d', $currentTime) === $date;
+        $interval = $settings->interval_minutes;
+        $startTime = $settings->start_time;
+        $endTime = $settings->end_time;
 
         $slots = [];
+        $timezone = 'Asia/Karachi';
+        $now = Carbon::now($timezone);
+        $selectedDate = Carbon::parse($date, $timezone);
 
-        for ($time = $startTime; $time <= $endTime - $interval; $time += $interval) {
-            $slotTime = strtotime($date . ' ' . date('H:i:s', $time));
+        $current = Carbon::parse($date . ' ' . $startTime, $timezone);
+        $end = Carbon::parse($date . ' ' . $endTime, $timezone);
 
-            // If it's today and the slot time has already passed, skip it
-            if ($isToday && $slotTime <= $currentTime) {
+        while ($current->lt($end)) {
+            if ($selectedDate->isToday() && $current->lt($now->copy()->addMinutes(30))) {
+                $current->addMinutes($interval);
                 continue;
             }
 
             $slots[] = [
-                'value' => date('H:i', $time),
-                'label' => date('h:i A', $time),
-                'timestamp' => $slotTime,
+                'value' => $current->format('H:i'),
+                'label' => $current->format('h:i A'),
+                'timestamp' => $current->timestamp,
             ];
+
+            $current->addMinutes($interval);
         }
 
         return $slots;

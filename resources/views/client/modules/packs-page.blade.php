@@ -3,6 +3,11 @@
 <section class="packs-menu">
     <div class="container py-4">
         <!-- Minimal horizontal navigation bar similar to Crumbl Cookies -->
+        @php
+        $orderType = Session::get('order_type', 'delivery');
+        @endphp
+
+        @if($orderType == 'delivery')
         <div class="crumbl-style-nav mb-4">
             <div class="location-selector" id="sector-dropdown">
                 <div class="location-display" id="selected-sector-display">
@@ -33,6 +38,13 @@
             </div>
             <div id="sector-feedback" class="mt-2"></div>
         </div>
+        @elseif($orderType == 'pickup')
+        <div class="pickup-indicator mb-4">
+            <div class="pickup-badge">
+                <i class="fas fa-store me-2"></i> <a href="{{route('pickup.time_selection')}}">Select Pickup Time</a>
+            </div>
+        </div>
+        @endif
 
         <div class="d-none d-md-block">
         <h1 class="heading-black">Brownie Packs</h1>
@@ -397,6 +409,24 @@
     .no-results small {
         display: block;
         color: #999;
+    }
+
+    /* Pickup badge styling */
+    .pickup-indicator {
+        display: flex;
+        justify-content: flex-start;
+        padding: 12px 0;
+    }
+
+    .pickup-badge {
+        display: inline-flex;
+        align-items: center;
+        background-color: #E8F4FE;
+        color: #0066CC;
+        font-weight: 500;
+        padding: 8px 15px;
+        border-radius: 50px;
+        font-size: 15px;
     }
     </style>
 </section>

@@ -326,27 +326,53 @@
                             <span><b>PKR ${subtotal.toFixed(2)}</b></span>
                         </div>`;
 
-                // Add delivery info if sector is selected
-                if (response.selected_sector) {
-                    const deliveryCharges = parseFloat(response.selected_sector.delivery_charges);
-                    const total = subtotal + deliveryCharges;
+                // Check order type
+                const orderType = response.order_type || 'delivery';
 
-                    html += `
-                    <div class="d-flex justify-content-between mt-2">
-                        <span>Delivery to ${response.selected_sector.name}:</span>
-                        <span><b>PKR ${deliveryCharges.toFixed(2)}</b></span>
-                    </div>
+                // Add delivery info if sector is selected (for delivery orders)
+                if (orderType === 'delivery') {
+                    if (response.selected_sector) {
+                        const deliveryCharges = parseFloat(response.selected_sector.delivery_charges);
+                        const total = subtotal + deliveryCharges;
 
-                    <div class="d-flex justify-content-between mt-3">
-                        <span class="fw-bold">Total:</span>
-                        <span class="fw-bold">PKR ${total.toFixed(2)}</span>
-                    </div>`;
-                } else {
-                    html += `
-                    <div class="alert alert-warning mt-3 py-2 small">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        Please <a href="{{ route('get-packmenupage') }}" class="alert-link">select a delivery area</a> to continue.
-                    </div>`;
+                        html += `
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Delivery to ${response.selected_sector.name}:</span>
+                            <span><b>PKR ${deliveryCharges.toFixed(2)}</b></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-3">
+                            <span class="fw-bold">Total:</span>
+                            <span class="fw-bold">PKR ${total.toFixed(2)}</span>
+                        </div>`;
+                    } else {
+                        html += `
+                        <div class="alert alert-warning mt-3 py-2 small">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Please <a href="{{ route('get-packmenupage') }}" class="alert-link">select a delivery area</a> to continue.
+                        </div>`;
+                    }
+                }
+                // Add pickup info if time slot is selected (for pickup orders)
+                else if (orderType === 'pickup') {
+                    if (response.selected_time_slot) {
+                        html += `
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Pickup:</span>
+                            <span class="text-success"><b>${response.selected_time_slot.date} at ${response.selected_time_slot.label}</b></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-3">
+                            <span class="fw-bold">Total:</span>
+                            <span class="fw-bold">PKR ${subtotal.toFixed(2)}</span>
+                        </div>`;
+                    } else {
+                        html += `
+                        <div class="alert alert-warning mt-3 py-2 small">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Please <a href="{{ route('pickup-packmenupage') }}" class="alert-link">select a pickup time</a> to continue.
+                        </div>`;
+                    }
                 }
 
                 html += `
@@ -362,10 +388,15 @@
             if (checkoutBtnContainer) {
                 let checkoutBtn = '';
                 if (response.cartItems && response.cartItems.length > 0) {
-                    if (response.selected_sector) {
+                    const orderType = response.order_type || 'delivery';
+
+                    if ((orderType === 'delivery' && response.selected_sector) ||
+                        (orderType === 'pickup' && response.selected_time_slot)) {
                         checkoutBtn = '<a href="{{ route("checkout.show") }}" class="btn btn-main w-100">Proceed to Checkout</a>';
-                    } else {
+                    } else if (orderType === 'delivery') {
                         checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Select Delivery Area</a>';
+                    } else {
+                        checkoutBtn = '<a href="{{ route("pickup-packmenupage") }}" class="btn btn-main w-100">Select Pickup Time</a>';
                     }
                 } else {
                     checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Order Now</a>';

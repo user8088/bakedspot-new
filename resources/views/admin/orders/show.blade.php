@@ -327,7 +327,11 @@
                     </p>
                     <p class="mb-0">
                         <strong>Payment Method:</strong>
-                        {{ ucfirst($order->payment_method ?? 'N/A') }}
+                        @if($order->payment_method === 'pickup')
+                            Payment on Pickup
+                        @else
+                            Cash on Delivery
+                        @endif
                     </p>
                     <p class="mb-0">
                         <strong>Payment Status:</strong>

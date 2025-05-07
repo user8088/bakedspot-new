@@ -20,11 +20,24 @@
                             <p class="mb-1">{{ $order->phone }}</p>
                             <p class="mb-1">{{ $order->email }}</p>
                             <p class="mb-1">{{ $order->address }}</p>
-                            <p class="mb-0">{{ $order->city }}, {{ $order->area }}</p>
+                            @if($order->sector_id)
+                                <p class="mb-0">{{ $order->city }}, {{ $order->area }}</p>
+                            {{-- @elseif($order->time_slot_id)
+                                <p class="mb-0">Pickup Time:</p> --}}
+                            @endif
                         </div>
                         <div class="col-md-6">
                             <h5>Payment Information</h5>
-                            <p class="mb-1">Method: Online Payment on Delivery</p>
+                            <p class="mb-1">
+                                Method:
+                                @if($order->sector_id)
+                                    Cash on Delivery
+                                @elseif($order->time_slot_id)
+                                    Payment on Pickup
+                                @else
+                                    Cash on Delivery
+                                @endif
+                            </p>
                             <p class="mb-1">Status: {{ ucfirst($order->status) }}</p>
                             <p class="mb-0">Total: PKR {{ number_format($order->total, 2) }}</p>
                         </div>
@@ -49,8 +62,10 @@
                             <span>PKR {{ number_format($order->subtotal, 2) }}</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
-                            <span>Delivery Charges:</span>
-                            <span>PKR {{ number_format($order->delivery_charges, 2) }}</span>
+                            @if($order->sector_id)
+                                <span>Delivery Charges:</span>
+                                <span>PKR {{ number_format($order->delivery_charges, 2) }}</span>
+                            @endif
                         </div>
                         <div class="d-flex justify-content-between fw-bold fs-5 mt-3 pt-3 border-top">
                             <span>Total:</span>

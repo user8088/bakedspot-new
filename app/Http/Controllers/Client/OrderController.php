@@ -42,7 +42,7 @@ class OrderController extends Controller
     public function processCheckout(Request $request)
     {
         // Validate the request
-        $validated = $request->validate([
+        $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:20',
             'email' => 'required|email|max:255',
@@ -53,9 +53,21 @@ class OrderController extends Controller
             'notes' => 'nullable|string',
             'payment_method' => 'required|in:cod',
             'delivery_type' => 'required|in:delivery,pickup',
-            'time_slot' => 'required_if:delivery_type,pickup|nullable|string',
-            'pickup_date' => 'required_if:delivery_type,pickup|nullable|date',
+            'time_slot' => 'nullable|string',
+            'pickup_date' => 'nullable|date',
         ]);
+
+        if ($validator->fails()) {
+            Log::warning('Checkout validation failed', [
+                'errors' => $validator->errors()->toArray(),
+                'input' => $request->all()
+            ]);
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $validated = $validator->validated();
 
         try {
             // Get cart items
@@ -86,24 +98,47 @@ class OrderController extends Controller
             } else {
                 // For pickup, no delivery charge
                 $deliveryCharges = 0;
+
+                // Use placeholders for address fields
+                if ($validated['address'] === 'Pickup') {
+                    $validated['address'] = 'In-store pickup';
+                    $validated['city'] = 'In-store pickup';
+                    $validated['area'] = 'In-store pickup';
+                }
             }
 
             $total = $subtotal + $deliveryCharges;
 
             // Get or create time slot for pickup
             $timeSlotId = null;
-            if ($validated['delivery_type'] === 'pickup' && !empty($validated['time_slot'])) {
+            $selectedTimeSlot = null;
+
+            if ($validated['delivery_type'] === 'pickup') {
+                // Try to get time slot from the form submission first
+                if (!empty($validated['time_slot'])) {
+                    $timeSlot = $validated['time_slot'];
+                    $pickupDate = $validated['pickup_date'];
+                }
+                // If not found in the form, try to get from session
+                else if (Session::has('selected_time_slot')) {
+                    $selectedTimeSlot = Session::get('selected_time_slot');
+                    $timeSlot = $selectedTimeSlot['time'];
+                    $pickupDate = $selectedTimeSlot['date'];
+                }
+                // If neither exists, return error
+                else {
+                    return redirect()->back()
+                        ->with('error', 'Please select a pickup time.')
+                        ->withInput();
+                }
+
                 // Get the time slot settings
                 $timeSlotSettings = TimeSlot::first();
-
                 if (!$timeSlotSettings) {
                     return redirect()->back()
                         ->with('error', 'Time slots are not configured properly. Please contact support.')
                         ->withInput();
                 }
-
-                // Time slot is in the format "HH:MM"
-                $timeSlot = $validated['time_slot'];
 
                 // Save the time slot ID
                 $timeSlotId = $timeSlotSettings->id;
@@ -119,7 +154,7 @@ class OrderController extends Controller
                 'area' => $validated['area'],
                 'postal_code' => $validated['zip'] ?? null,
                 'delivery_notes' => $validated['notes'] ?? null,
-                'payment_method' => $validated['payment_method'],
+                'payment_method' => $validated['delivery_type'] === 'pickup' ? 'pickup' : $validated['payment_method'],
                 'payment_status' => false, // Set payment status as unpaid for COD
                 'sector_id' => $sectorId,
                 'time_slot_id' => $timeSlotId,
@@ -151,15 +186,19 @@ class OrderController extends Controller
             // Clear cart
             Cart::where('session_id', $sessionId)->delete();
 
-            // Clear selected sector
+            // Clear selected sector and time slot
             Session::forget('selected_sector');
+            Session::forget('selected_time_slot');
+            Session::forget('order_type');
 
             // Redirect to thank you page
             return redirect()->route('checkout.success', ['order_id' => $order->id])
                 ->with('success', 'Your order has been placed successfully!');
 
         } catch (\Exception $e) {
-            Log::error('Checkout error: ' . $e->getMessage());
+            Log::error('Checkout error: ' . $e->getMessage(), [
+                'stacktrace' => $e->getTraceAsString()
+            ]);
             return redirect()->back()
                 ->with('error', 'There was an error processing your order. Please try again.')
                 ->withInput();

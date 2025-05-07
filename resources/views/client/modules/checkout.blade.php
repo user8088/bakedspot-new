@@ -32,12 +32,15 @@
                         <h2 class="section-title">Delivery Options</h2>
                         <div class="row mb-3">
                             <div class="col-12">
+                                @php
+                                    $orderType = Session::get('order_type', 'delivery');
+                                @endphp
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery" value="delivery" checked>
+                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery" value="delivery" {{ $orderType == 'delivery' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="delivery">Delivery</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="delivery_type" id="pickup" value="pickup">
+                                    <input class="form-check-input" type="radio" name="delivery_type" id="pickup" value="pickup" {{ $orderType == 'pickup' ? 'checked' : '' }}>
                                     <label class="form-check-label" for="pickup">Pickup</label>
                                 </div>
                             </div>
@@ -47,12 +50,20 @@
                         <div id="pickup-options" class="row" style="display: none;">
                             <div class="col-md-6 mb-3">
                                 <label for="pickup_date" class="form-label">Pickup Date</label>
-                                <input type="date" class="form-control" id="pickup_date" name="pickup_date" min="{{ date('Y-m-d') }}" value="{{ date('Y-m-d') }}">
+                                <input type="date" class="form-control" id="pickup_date" name="pickup_date"
+                                    min="{{ date('Y-m-d') }}"
+                                    value="{{ Session::get('selected_time_slot.date', date('Y-m-d')) }}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="time_slot" class="form-label">Pickup Time</label>
                                 <select class="form-control" id="time_slot" name="time_slot">
-                                    <option value="">Select a time slot</option>
+                                    @if(Session::has('selected_time_slot'))
+                                        <option value="{{ Session::get('selected_time_slot.time') }}">
+                                            {{ Session::get('selected_time_slot.label') }}
+                                        </option>
+                                    @else
+                                        <option value="">Select a time slot</option>
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -120,8 +131,12 @@
                             $sessionId = Session::getId();
                             $cartItems = \App\Models\Cart::where('session_id', $sessionId)->get();
                             $subtotal = $cartItems->sum('total_price');
+                            $orderType = Session::get('order_type', 'delivery');
                             $selectedSector = session('selected_sector');
-                            $deliveryCharges = $selectedSector ? $selectedSector['delivery_charges'] : 0;
+                            $selectedTimeSlot = session('selected_time_slot');
+
+                            // Calculate delivery charges based on order type
+                            $deliveryCharges = ($orderType == 'delivery' && $selectedSector) ? $selectedSector['delivery_charges'] : 0;
                             $total = $subtotal + $deliveryCharges;
                         @endphp
 
@@ -148,6 +163,7 @@
                                     <span>PKR {{ number_format($subtotal, 2) }}</span>
                                 </div>
 
+                                @if($orderType == 'delivery')
                                 <div class="d-flex justify-content-between mb-2" id="delivery-cost-row">
                                     @if($selectedSector)
                                     <span>Delivery to {{ $selectedSector['name'] }}:</span>
@@ -157,6 +173,12 @@
                                     <span>PKR 0.00</span>
                                     @endif
                                 </div>
+                                @elseif($orderType == 'pickup' && $selectedTimeSlot)
+                                <div class="d-flex justify-content-between mb-2 text-success">
+                                    <span>Pickup:</span>
+                                    <span>{{ $selectedTimeSlot['date'] }} at {{ $selectedTimeSlot['label'] }}</span>
+                                </div>
+                                @endif
 
                                 <div class="d-flex justify-content-between fw-bold fs-5 mt-3 pt-3 border-top">
                                     <span>Total:</span>
@@ -266,25 +288,59 @@
         const totalPriceElement = document.getElementById('total-price');
         const pickupDateInput = document.getElementById('pickup_date');
         const timeSlotSelect = document.getElementById('time_slot');
+        const addressInput = document.getElementById('address');
+        const cityInput = document.getElementById('city');
+        const areaInput = document.getElementById('area');
+        const checkoutForm = document.getElementById('checkout-form');
 
         // Initial subtotal
         const subtotal = {{ $subtotal }};
+
+        @php
+            $orderType = Session::get('order_type', 'delivery');
+        @endphp
+
+        // Set initial state based on order_type
+        if ('{{ $orderType }}' === 'pickup') {
+            pickupRadio.checked = true;
+        } else {
+            deliveryRadio.checked = true;
+        }
 
         // Toggle delivery/pickup options
         function toggleDeliveryOptions() {
             if (deliveryRadio.checked) {
                 deliveryAddressSection.style.display = 'block';
                 pickupOptionsSection.style.display = 'none';
-                deliveryCostRow.style.display = 'flex';
+                if (deliveryCostRow) {
+                    deliveryCostRow.style.display = 'flex';
+                }
+
+                // Make address fields required
+                addressInput.required = true;
+                cityInput.required = true;
+                areaInput.required = true;
 
                 // Update total with delivery charges
-                const deliveryCharges = {{ $deliveryCharges }};
+                const deliveryCharges = {{ $selectedSector ? $selectedSector['delivery_charges'] : 0 }};
                 const total = subtotal + deliveryCharges;
                 totalPriceElement.textContent = 'PKR ' + total.toFixed(2);
             } else {
                 deliveryAddressSection.style.display = 'none';
                 pickupOptionsSection.style.display = 'block';
-                deliveryCostRow.style.display = 'none';
+                if (deliveryCostRow) {
+                    deliveryCostRow.style.display = 'none';
+                }
+
+                // Make address fields not required for pickup
+                addressInput.required = false;
+                cityInput.required = false;
+                areaInput.required = false;
+
+                // Set placeholder values for address fields for pickup
+                if (!addressInput.value) addressInput.value = 'Pickup';
+                if (!cityInput.value) cityInput.value = 'Pickup';
+                if (!areaInput.value) areaInput.value = 'Pickup';
 
                 // Update total without delivery charges
                 totalPriceElement.textContent = 'PKR ' + subtotal.toFixed(2);
@@ -294,12 +350,37 @@
         deliveryRadio.addEventListener('change', toggleDeliveryOptions);
         pickupRadio.addEventListener('change', toggleDeliveryOptions);
 
+        // Handle form submission
+        checkoutForm.addEventListener('submit', function(e) {
+            if (pickupRadio.checked) {
+                // Validate that we have a time slot selected for pickup
+                if (timeSlotSelect.value === '') {
+                    e.preventDefault();
+                    alert('Please select a time slot for pickup');
+                    return false;
+                }
+            }
+        });
+
         // Handle date change for time slots
         pickupDateInput.addEventListener('change', function() {
             const selectedDate = this.value;
 
-            // Clear current options
+            // Clear current options except the preselected one if it exists
+            const selectedOption = timeSlotSelect.value;
+            const selectedText = timeSlotSelect.options[timeSlotSelect.selectedIndex]?.text;
+
             timeSlotSelect.innerHTML = '<option value="">Select a time slot</option>';
+
+            // Add back the selected option if we're on the same date as the pre-selected one
+            if (selectedOption && selectedDate === '{{ Session::get('selected_time_slot.date', '') }}') {
+                const option = document.createElement('option');
+                option.value = selectedOption;
+                option.textContent = selectedText;
+                option.selected = true;
+                timeSlotSelect.appendChild(option);
+                return;
+            }
 
             // Fetch new time slots
             fetch(`{{ route('checkout.time_slots') }}?date=${selectedDate}`)
@@ -323,9 +404,9 @@
                     console.error('Error fetching time slots:', error);
                 });
         });
-    });
 
-    // Initialize
-    toggleDeliveryOptions();
+        // Initialize display
+        toggleDeliveryOptions();
+    });
 </script>
 @endsection

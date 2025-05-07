@@ -81,7 +81,13 @@
                                 <span class="badge bg-{{ $order->payment_status ? 'success' : 'warning' }}">
                                     {{ $order->payment_status ? 'Paid' : 'Pending' }}
                                 </span>
-                                <div class="small text-muted">{{ ucfirst($order->payment_method) }}</div>
+                                <div class="small text-muted">
+                                    @if($order->payment_method === 'pickup')
+                                        Payment on Pickup
+                                    @else
+                                        Cash on Delivery
+                                    @endif
+                                </div>
                             </td>
                             <td>
                                 <div class="d-flex gap-1">

@@ -61,4 +61,15 @@ class PickupController extends Controller
         $timeSlots = TimeSlot::generateAvailableTimeSlots($request->date);
         return response()->json($timeSlots);
     }
+
+    /**
+     * Show the time selection page for pickup orders
+     */
+    public function showTimeSelection()
+    {
+        // Mark this as a pickup order in the session
+        Session::put('order_type', 'pickup');
+
+        return view('client.modules.pickup-time-selection');
+    }
 }
