@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Sector;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class MasterController extends Controller
 {
@@ -18,7 +19,12 @@ class MasterController extends Controller
 
     public function get_PackMenuPage()
     {
-        $sectors = Sector::all();
+        // Only set order type to delivery if it's not already set
+        if (!Session::has('order_type')) {
+            Session::put('order_type', 'delivery');
+        }
+
+        $sectors = \App\Models\Sector::all();
         return view('client.modules.packs-page', compact('sectors'));
     }
 

@@ -17,8 +17,18 @@ class PickupController extends Controller
     {
         // Mark this as a pickup order in the session
         Session::put('order_type', 'pickup');
+        return redirect()->route('pickup.menu');
+    }
 
-        return redirect()->route('get-packmenupage');
+    /**
+     * Show the pack menu page for pickup orders
+     */
+    public function showPackMenu()
+    {
+        // Ensure order type is set to pickup
+        Session::put('order_type', 'pickup');
+        $sectors = \App\Models\Sector::all();
+        return view('client.modules.packs-page', compact('sectors'));
     }
 
     /**

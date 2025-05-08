@@ -16,7 +16,7 @@
                 </a>
             </div>
             <div class="col-lg-6 mb-4">
-                <a href="{{route('pickup-packmenupage')}}">
+                <a href="{{route('pickup.menu')}}">
                 <div class="card order-card shadow">
                     <img src="{{ asset('images/sectors.png') }}" width="100" alt="Pickup" class="card-img-top">
                     <div class="card-body text-center">

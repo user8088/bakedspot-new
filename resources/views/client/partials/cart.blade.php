@@ -103,7 +103,9 @@
                     $selectedTimeSlot = Session::get('selected_time_slot');
                 @endphp
 
-                @if(($orderType == 'delivery' && $selectedSector) || ($orderType == 'pickup' && $selectedTimeSlot))
+                @if($orderType == 'delivery' && $selectedSector)
+                    <a href="{{ route('checkout.show') }}" class="btn btn-main w-100">Proceed to Checkout</a>
+                @elseif($orderType == 'pickup' && $selectedTimeSlot)
                     <a href="{{ route('checkout.show') }}" class="btn btn-main w-100">Proceed to Checkout</a>
                 @elseif($orderType == 'delivery')
                     <a href="{{ route('get-packmenupage') }}" class="btn btn-main w-100">Select Delivery Area</a>
@@ -285,7 +287,6 @@
                     </div>`;
                 }
             } else if (orderType === 'pickup') {
-                // For pickup orders
                 if (response.selected_time_slot) {
                     html += `
                     <div class="d-flex justify-content-between mt-2">
@@ -319,16 +320,17 @@
         if (response.cartItems && response.cartItems.length > 0) {
             const orderType = response.order_type || 'delivery';
 
-            if ((orderType === 'delivery' && response.selected_sector) ||
-                (orderType === 'pickup' && response.selected_time_slot)) {
+            if (orderType === 'delivery' && response.selected_sector) {
+                checkoutBtn = '<a href="{{ route("checkout.show") }}" class="btn btn-main w-100">Proceed to Checkout</a>';
+            } else if (orderType === 'pickup' && response.selected_time_slot) {
                 checkoutBtn = '<a href="{{ route("checkout.show") }}" class="btn btn-main w-100">Proceed to Checkout</a>';
             } else if (orderType === 'delivery') {
                 checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Select Delivery Area</a>';
-            } else {
+            } else if (orderType === 'pickup') {
                 checkoutBtn = '<a href="{{ route("pickup.time_selection") }}" class="btn btn-main w-100">Select Pickup Time</a>';
             }
         } else {
-            checkoutBtn = '<a href="{{ route("get-packmenupage") }}" class="btn btn-main w-100">Order Now</a>';
+            checkoutBtn = '<a href="{{ route("start-order") }}" class="btn btn-main w-100">Order Now</a>';
         }
         $('.offcanvas-body > .mt-4').html(checkoutBtn);
 

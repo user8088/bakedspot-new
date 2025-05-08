@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Log;
 class OrderController extends Controller
 {
     public function start_order(){
+        // Clear any existing order type
+        Session::forget('order_type');
         return view('client.modules.order-location');
     }
 
