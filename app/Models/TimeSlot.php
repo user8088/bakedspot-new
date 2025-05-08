@@ -29,6 +29,7 @@ class TimeSlot extends Model
      */
     protected $casts = [
         'active' => 'boolean',
+        'interval_minutes' => 'integer'
     ];
 
     /**
@@ -67,6 +68,16 @@ class TimeSlot extends Model
             // If unparseable, keep the original value (validation will catch this)
             $this->attributes['end_time'] = $value;
         }
+    }
+
+    /**
+     * Get a formatted time range string.
+     *
+     * @return string
+     */
+    public function getTimeRangeAttribute()
+    {
+        return $this->start_time . ' - ' . $this->end_time;
     }
 
     /**

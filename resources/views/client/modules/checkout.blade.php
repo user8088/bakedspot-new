@@ -29,24 +29,19 @@
 
                     <!-- Delivery Options -->
                     <div class="checkout-section mb-4">
-                        <h2 class="section-title">Delivery Options</h2>
+                        <h2 class="section-title">Order Type</h2>
                         <div class="row mb-3">
                             <div class="col-12">
                                 @php
                                     $orderType = Session::get('order_type', 'delivery');
                                 @endphp
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="delivery_type" id="delivery" value="delivery" {{ $orderType == 'delivery' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="delivery">Delivery</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="delivery_type" id="pickup" value="pickup" {{ $orderType == 'pickup' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="pickup">Pickup</label>
+                                <input type="hidden" name="delivery_type" value="{{ $orderType }}">
+                                <div class="delivery-type-display">
+                                    <span class="text-capitalize">{{ $orderType }}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Pickup Time Slots (hidden by default) -->
                         <div id="pickup-options" class="row" style="display: none;">
                             <div class="col-md-6 mb-3">
                                 <label for="pickup_date" class="form-label">Pickup Date</label>
@@ -65,6 +60,25 @@
                                         <option value="">Select a time slot</option>
                                     @endif
                                 </select>
+                            </div>
+                        </div>
+
+                        <!-- Pickup Location Section -->
+                        <div id="pickup-location" class="row mt-4" style="display: none;">
+                            <div class="col-12">
+                                <h3 class="section-title mb-3">Pickup Location</h3>
+                                <div class="pickup-address mb-3">
+                                    {{-- <p class="mb-2"><strong>Address:</strong></p> --}}
+                                    <p class="mb-0">House no. 237, MPCHS, Main road 6, Block B Multi Gardens B-17, Islamabad</p>
+                                </div>
+                                <div class="map-container" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden; border-radius: 8px;">
+                                    <iframe
+                                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                                        loading="lazy"
+                                        allowfullscreen
+                                        src="https://maps.google.com/maps?q=Bakedspot&output=embed">
+                                    </iframe>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -110,10 +124,20 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod" checked>
                                 <label class="form-check-label" for="cod">
-                                    Cash on Delivery
+                                    @if($orderType == 'pickup')
+                                        Cash on Pickup
+                                    @else
+                                        Cash on Delivery
+                                    @endif
                                 </label>
                                 <div class="payment-description">
-                                    <small class="text-muted">Pay with cash when your order is delivered.</small>
+                                    <small class="text-muted">
+                                        @if($orderType == 'pickup')
+                                            Pay with cash when you pick up your order.
+                                        @else
+                                            Pay with cash when your order is delivered.
+                                        @endif
+                                    </small>
                                 </div>
                             </div>
                         </div>
@@ -280,10 +304,9 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const deliveryRadio = document.getElementById('delivery');
-        const pickupRadio = document.getElementById('pickup');
         const deliveryAddressSection = document.getElementById('delivery-address');
         const pickupOptionsSection = document.getElementById('pickup-options');
+        const pickupLocationSection = document.getElementById('pickup-location');
         const deliveryCostRow = document.getElementById('delivery-cost-row');
         const totalPriceElement = document.getElementById('total-price');
         const pickupDateInput = document.getElementById('pickup_date');
@@ -302,57 +325,47 @@
 
         // Set initial state based on order_type
         if ('{{ $orderType }}' === 'pickup') {
-            pickupRadio.checked = true;
-        } else {
-            deliveryRadio.checked = true;
-        }
-
-        // Toggle delivery/pickup options
-        function toggleDeliveryOptions() {
-            if (deliveryRadio.checked) {
-                deliveryAddressSection.style.display = 'block';
-                pickupOptionsSection.style.display = 'none';
-                if (deliveryCostRow) {
-                    deliveryCostRow.style.display = 'flex';
-                }
-
-                // Make address fields required
-                addressInput.required = true;
-                cityInput.required = true;
-                areaInput.required = true;
-
-                // Update total with delivery charges
-                const deliveryCharges = {{ $selectedSector ? $selectedSector['delivery_charges'] : 0 }};
-                const total = subtotal + deliveryCharges;
-                totalPriceElement.textContent = 'PKR ' + total.toFixed(2);
-            } else {
-                deliveryAddressSection.style.display = 'none';
-                pickupOptionsSection.style.display = 'block';
-                if (deliveryCostRow) {
-                    deliveryCostRow.style.display = 'none';
-                }
-
-                // Make address fields not required for pickup
-                addressInput.required = false;
-                cityInput.required = false;
-                areaInput.required = false;
-
-                // Set placeholder values for address fields for pickup
-                if (!addressInput.value) addressInput.value = 'Pickup';
-                if (!cityInput.value) cityInput.value = 'Pickup';
-                if (!areaInput.value) areaInput.value = 'Pickup';
-
-                // Update total without delivery charges
-                totalPriceElement.textContent = 'PKR ' + subtotal.toFixed(2);
+            deliveryAddressSection.style.display = 'none';
+            pickupOptionsSection.style.display = 'block';
+            pickupLocationSection.style.display = 'block';
+            if (deliveryCostRow) {
+                deliveryCostRow.style.display = 'none';
             }
-        }
 
-        deliveryRadio.addEventListener('change', toggleDeliveryOptions);
-        pickupRadio.addEventListener('change', toggleDeliveryOptions);
+            // Make address fields not required for pickup
+            addressInput.required = false;
+            cityInput.required = false;
+            areaInput.required = false;
+
+            // Set placeholder values for address fields for pickup
+            if (!addressInput.value) addressInput.value = 'Pickup';
+            if (!cityInput.value) cityInput.value = 'Pickup';
+            if (!areaInput.value) areaInput.value = 'Pickup';
+
+            // Update total without delivery charges
+            totalPriceElement.textContent = 'PKR ' + subtotal.toFixed(2);
+        } else {
+            deliveryAddressSection.style.display = 'block';
+            pickupOptionsSection.style.display = 'none';
+            pickupLocationSection.style.display = 'none';
+            if (deliveryCostRow) {
+                deliveryCostRow.style.display = 'flex';
+            }
+
+            // Make address fields required
+            addressInput.required = true;
+            cityInput.required = true;
+            areaInput.required = true;
+
+            // Update total with delivery charges
+            const deliveryCharges = {{ $selectedSector ? $selectedSector['delivery_charges'] : 0 }};
+            const total = subtotal + deliveryCharges;
+            totalPriceElement.textContent = 'PKR ' + total.toFixed(2);
+        }
 
         // Handle form submission
         checkoutForm.addEventListener('submit', function(e) {
-            if (pickupRadio.checked) {
+            if ('{{ $orderType }}' === 'pickup') {
                 // Validate that we have a time slot selected for pickup
                 if (timeSlotSelect.value === '') {
                     e.preventDefault();
@@ -404,9 +417,6 @@
                     console.error('Error fetching time slots:', error);
                 });
         });
-
-        // Initialize display
-        toggleDeliveryOptions();
     });
 </script>
 @endsection

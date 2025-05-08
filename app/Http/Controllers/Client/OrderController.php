@@ -134,16 +134,18 @@ class OrderController extends Controller
                         ->withInput();
                 }
 
-                // Get the time slot settings
-                $timeSlotSettings = TimeSlot::first();
-                if (!$timeSlotSettings) {
-                    return redirect()->back()
-                        ->with('error', 'Time slots are not configured properly. Please contact support.')
-                        ->withInput();
-                }
+                // Create or get the time slot
+                $timeSlotRecord = TimeSlot::firstOrCreate(
+                    ['start_time' => $timeSlot],
+                    [
+                        'end_time' => date('H:i', strtotime($timeSlot . ' +1 hour')),
+                        'interval_minutes' => 60,
+                        'active' => true
+                    ]
+                );
 
                 // Save the time slot ID
-                $timeSlotId = $timeSlotSettings->id;
+                $timeSlotId = $timeSlotRecord->id;
             }
 
             // Create order
@@ -160,6 +162,7 @@ class OrderController extends Controller
                 'payment_status' => false, // Set payment status as unpaid for COD
                 'sector_id' => $sectorId,
                 'time_slot_id' => $timeSlotId,
+                'pickup_time' => $validated['delivery_type'] === 'pickup' ? $pickupDate . ' ' . $timeSlot : null,
                 'delivery_charges' => $deliveryCharges,
                 'subtotal' => $subtotal,
                 'total' => $total,
@@ -199,17 +202,23 @@ class OrderController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Checkout error: ' . $e->getMessage(), [
-                'stacktrace' => $e->getTraceAsString()
+                'stacktrace' => $e->getTraceAsString(),
+                'request_data' => $request->all(),
+                'session_data' => [
+                    'selected_sector' => session('selected_sector'),
+                    'selected_time_slot' => session('selected_time_slot'),
+                    'order_type' => session('order_type')
+                ]
             ]);
             return redirect()->back()
-                ->with('error', 'There was an error processing your order. Please try again.')
+                ->with('error', 'There was an error processing your order: ' . $e->getMessage())
                 ->withInput();
         }
     }
 
     public function checkoutSuccess($order_id)
     {
-        $order = Order::with('items')->findOrFail($order_id);
+        $order = Order::with(['items', 'timeSlot'])->findOrFail($order_id);
         return view('client.modules.checkout-success', compact('order'));
     }
 }

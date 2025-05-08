@@ -10,8 +10,8 @@
         @if($orderType == 'delivery')
         <div class="crumbl-style-nav mb-4">
             <div class="location-selector" id="sector-dropdown">
-                <div class="location-display" id="selected-sector-display">
-                    <i class="fas fa-map-marker-alt"></i>
+                <div class="location-display pickup-badge" id="selected-sector-display">
+                    <i class="fas fa-map-marker-alt" style="color: #000;"></i>
                     <span class="sector-placeholder">Select delivery area</span>
                     <span class="sector-name" style="display: none;"></span>
                     <i class="fas fa-chevron-down arrow-icon"></i>
@@ -41,7 +41,7 @@
         @elseif($orderType == 'pickup')
         <div class="pickup-indicator mb-4">
             <div class="pickup-badge">
-                <i class="fas fa-store me-2"></i> <a href="{{route('pickup.time_selection')}}">Select Pickup Time</a>
+                <i class="fas fa-store me-2"></i> <a href="{{route('pickup.time_selection')}}" style="color: #000;">Select Pickup Time</a>
             </div>
         </div>
         @endif
@@ -262,7 +262,6 @@
         display: flex;
         align-items: center;
         background-color: white;
-        border-bottom: 1px solid #f0f0f0;
         padding: 12px 0;
         position: relative;
     }
@@ -282,9 +281,7 @@
         transition: all 0.2s ease;
     }
 
-    .location-display:hover {
-        background-color: #f8f8f8;
-    }
+
 
     .location-display.active {
         background-color: #f0f0f0;
@@ -333,9 +330,7 @@
         transition: background 0.2s;
     }
 
-    .location-option:hover {
-        background-color: #f7f7f7;
-    }
+
 
     .option-details {
         display: flex;
@@ -421,8 +416,8 @@
     .pickup-badge {
         display: inline-flex;
         align-items: center;
-        background-color: #E8F4FE;
-        color: #0066CC;
+        background-color: #FFB9CD;
+        color: #000;
         font-weight: 500;
         padding: 8px 15px;
         border-radius: 50px;
