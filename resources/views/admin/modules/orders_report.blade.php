@@ -29,7 +29,7 @@
                             <label for="end_date" class="form-label">End Date</label>
                             <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $end_date }}">
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <label for="status" class="form-label">Status</label>
                             <select class="form-select" id="status" name="status">
                                 <option value="all" @if($status == 'all') selected @endif>All</option>
@@ -39,7 +39,23 @@
                                 <option value="cancelled" @if($status == 'cancelled') selected @endif>Cancelled</option>
                             </select>
                         </div>
-                        <div class="col-md-3 d-flex align-items-end">
+                        <div class="col-md-2">
+                            <label for="payment_method" class="form-label">Payment Method</label>
+                            <select class="form-select" id="payment_method" name="payment_method">
+                                <option value="all" @if(request('payment_method') == 'all') selected @endif>All</option>
+                                <option value="cod" @if(request('payment_method') == 'cod') selected @endif>Cash on Delivery</option>
+                                <option value="pickup" @if(request('payment_method') == 'pickup') selected @endif>Payment on Pickup</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="payment_status" class="form-label">Payment Status</label>
+                            <select class="form-select" id="payment_status" name="payment_status">
+                                <option value="all" @if(request('payment_status') == 'all') selected @endif>All</option>
+                                <option value="1" @if(request('payment_status') == '1') selected @endif>Paid</option>
+                                <option value="0" @if(request('payment_status') == '0') selected @endif>Pending</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12 d-flex justify-content-end mt-2">
                             <button type="submit" class="btn btn-primary">Apply Filters</button>
                         </div>
                     </form>
@@ -113,6 +129,7 @@
                             <th>Order ID</th>
                             <th>Customer</th>
                             <th>Date</th>
+                            <th>Time Slot</th>
                             <th>Amount</th>
                             <th>Status</th>
                             <th>Payment</th>
@@ -130,6 +147,13 @@
                                 <div class="small text-muted">{{ $order->email ?? 'No email' }}</div>
                             </td>
                             <td>{{ $order->created_at->format('M d, Y') }}</td>
+                            <td>
+                                @if($order->timeSlot)
+                                    {{ date('h:i A', strtotime($order->timeSlot->start_time)) }} - {{ date('h:i A', strtotime($order->timeSlot->end_time)) }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                             <td>PKR {{ number_format($order->total, 2) }}</td>
                             <td>
                                 <span class="badge bg-{{
@@ -160,7 +184,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center">No orders found matching the criteria</td>
+                            <td colspan="8" class="text-center">No orders found matching the criteria</td>
                         </tr>
                         @endforelse
                     </tbody>

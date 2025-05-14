@@ -320,7 +320,7 @@
                     <p class="mb-0">
                         <strong>Time Slot:</strong>
                         @if($order->timeSlot)
-                            {{ $order->timeSlot->start_time }} - {{ $order->timeSlot->end_time }}
+                            {{ date('h:i A', strtotime($order->timeSlot->start_time)) }} - {{ date('h:i A', strtotime($order->timeSlot->end_time)) }}
                         @else
                             N/A
                         @endif

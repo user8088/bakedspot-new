@@ -107,6 +107,12 @@
                 @if($status != 'all')
                 | Status: {{ ucfirst($status) }} Orders
                 @endif
+                @if($payment_method != 'all')
+                | Method: {{ $payment_method == 'cod' ? 'Cash on Delivery' : 'Payment on Pickup' }}
+                @endif
+                @if($payment_status != 'all')
+                | Payment: {{ $payment_status ? 'Paid' : 'Pending' }}
+                @endif
             </div>
         </div>
 
@@ -163,7 +169,7 @@
                     <td>{{ $order->created_at->format('M d, Y') }}</td>
                     <td>
                         @if($order->timeSlot)
-                            {{ $order->timeSlot->start_time }} - {{ $order->timeSlot->end_time }}
+                            {{ date('h:i A', strtotime($order->timeSlot->start_time)) }} - {{ date('h:i A', strtotime($order->timeSlot->end_time)) }}
                         @else
                             N/A
                         @endif

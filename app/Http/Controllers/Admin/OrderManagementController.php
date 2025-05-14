@@ -28,6 +28,16 @@ class OrderManagementController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Filter by payment method
+        if ($request->has('payment_method') && $request->payment_method != 'all') {
+            $query->where('payment_method', $request->payment_method);
+        }
+
+        // Filter by payment status
+        if ($request->has('payment_status') && $request->payment_status != 'all') {
+            $query->where('payment_status', $request->payment_status);
+        }
+
         if ($request->has('date_from') && $request->date_from) {
             $query->whereDate('created_at', '>=', $request->date_from);
         }
@@ -129,12 +139,16 @@ class OrderManagementController extends Controller
         $start_date = $request->start_date ?? date('Y-m-d', strtotime('-30 days'));
         $end_date = $request->end_date ?? date('Y-m-d');
         $status = $request->status ?? 'all';
+        $payment_method = $request->payment_method ?? 'all';
+        $payment_status = $request->payment_status ?? 'all';
 
         // Validate request
         $request->validate([
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
             'status' => 'nullable|in:all,pending,processing,completed,cancelled',
+            'payment_method' => 'nullable|in:all,cod,pickup',
+            'payment_status' => 'nullable|in:all,0,1',
         ]);
 
         $query = Order::with(['user', 'orderItems.product', 'timeSlot'])
@@ -143,6 +157,14 @@ class OrderManagementController extends Controller
 
         if ($status != 'all') {
             $query->where('status', $status);
+        }
+
+        if ($payment_method != 'all') {
+            $query->where('payment_method', $payment_method);
+        }
+
+        if ($payment_status != 'all') {
+            $query->where('payment_status', $payment_status);
         }
 
         $orders = $query->orderBy('created_at', 'desc')->get();
@@ -166,6 +188,8 @@ class OrderManagementController extends Controller
                 'start_date',
                 'end_date',
                 'status',
+                'payment_method',
+                'payment_status',
                 'totalOrders',
                 'totalRevenue',
                 'ordersByStatus'
@@ -201,7 +225,7 @@ class OrderManagementController extends Controller
                     $items = rtrim($items, ', ');
 
                     $timeSlot = $order->timeSlot
-                        ? $order->timeSlot->start_time . ' - ' . $order->timeSlot->end_time
+                        ? date('h:i A', strtotime($order->timeSlot->start_time)) . ' - ' . date('h:i A', strtotime($order->timeSlot->end_time))
                         : 'N/A';
 
                     fputcsv($file, [
@@ -230,6 +254,8 @@ class OrderManagementController extends Controller
             'start_date',
             'end_date',
             'status',
+            'payment_method',
+            'payment_status',
             'totalOrders',
             'totalRevenue',
             'ordersByStatus'

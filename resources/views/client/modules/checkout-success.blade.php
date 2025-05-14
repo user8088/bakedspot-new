@@ -22,8 +22,11 @@
                             <p class="mb-1">{{ $order->address }}</p>
                             @if($order->sector_id)
                                 <p class="mb-0">{{ $order->city }}, {{ $order->area }}</p>
-                            {{-- @elseif($order->time_slot_id)
-                                <p class="mb-0">Pickup Time:</p> --}}
+                            @elseif($order->time_slot_id && $order->timeSlot)
+                                @php
+                                    $pickupDate = $order->created_at->format('Y-m-d');
+                                @endphp
+                                <p class="mb-0">Pickup Time: {{ $pickupDate }} at {{ date('h:i A', strtotime($order->timeSlot->start_time)) }}</p>
                             @endif
                         </div>
                         <div class="col-md-6">
@@ -77,7 +80,9 @@
 
             <div class="text-center mb-4">
                 <p>You will receive an email confirmation shortly at <strong>{{ $order->email }}</strong></p>
-                <p class="text-note">Please make sure you have online payment ready upon delivery.</p>
+                @if($order->sector_id)
+                    <p class="text-note">Please make sure you have online payment ready upon delivery.</p>
+                @endif
             </div>
 
             <div class="text-center">

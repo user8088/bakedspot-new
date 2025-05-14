@@ -35,13 +35,15 @@
 
                     @if($cartCount === 0)
                         <a id="orderNowBtn" href="{{route('get-packmenupage')}}" class="btn btn-order-nav py-2 px-3">
-                            <span class="fw-bold button-text">Order Now</span>
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="fw-bold button-text d-md-inline d-none">Order Now</span>
                         </a>
                     @else
                         <button id="cartBtn" class="btn btn-main py-2 px-3" data-bs-toggle="offcanvas"
                             data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
-                            <i class="fas fa-shopping-bag me-2"></i>
-                            <span class="fw-bold button-text">View Bag ({{ $cartCount }})</span>
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="badge bg-danger rounded-pill cart-count">{{ $cartCount }}</span>
+                            <span class="fw-bold button-text d-md-inline d-none">View Bag ({{ $cartCount }})</span>
                         </button>
                     @endif
                 </div>
@@ -91,13 +93,21 @@
                 newCartBtn.setAttribute('data-bs-target', '#cartOffcanvas');
                 newCartBtn.setAttribute('aria-controls', 'cartOffcanvas');
                 newCartBtn.innerHTML = `
-                    <i class="fas fa-shopping-bag me-2"></i>
-                    <span class="fw-bold button-text">View Bag (${count})</span>
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="badge bg-danger rounded-pill cart-count">${count}</span>
+                    <span class="fw-bold button-text d-md-inline d-none">View Bag (${count})</span>
                 `;
                 cartButtons.appendChild(newCartBtn);
             } else {
                 // Update existing cart button count
-                cartBtn.querySelector('.button-text').textContent = `View Bag (${count})`;
+                const countBadge = cartBtn.querySelector('.cart-count');
+                if (countBadge) {
+                    countBadge.textContent = count;
+                }
+                const buttonText = cartBtn.querySelector('.button-text');
+                if (buttonText) {
+                    buttonText.textContent = `View Bag (${count})`;
+                }
             }
         } else {
             // If cart is empty, show order now button
@@ -109,7 +119,10 @@
                 newOrderBtn.id = 'orderNowBtn';
                 newOrderBtn.href = "{{ route('get-packmenupage') }}";
                 newOrderBtn.className = 'btn btn-order-nav py-2 px-3';
-                newOrderBtn.innerHTML = '<span class="fw-bold button-text">Order Now</span>';
+                newOrderBtn.innerHTML = `
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="fw-bold button-text d-md-inline d-none">Order Now</span>
+                `;
                 cartButtons.appendChild(newOrderBtn);
             }
         }
@@ -130,5 +143,47 @@
 <style>
     .non-home-navbar {
         background-color: #FFB9CD !important;
+    }
+
+    /* Cart button styles */
+    .cart-count {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(25%, -25%);
+        font-size: 0.6rem;
+    }
+
+    #cartBtn, #orderNowBtn {
+        position: relative;
+    }
+
+    @media (max-width: 767px) {
+        #cartBtn, #orderNowBtn {
+            padding: 0.5rem 0.75rem !important;
+        }
+
+        /* Show only icon on mobile */
+        #cartBtn .fa-shopping-bag, #orderNowBtn .fa-shopping-cart {
+            display: inline-block;
+        }
+    }
+
+    @media (min-width: 768px) {
+        /* Hide icon on desktop, show only text */
+        #cartBtn .fa-shopping-bag, #orderNowBtn .fa-shopping-cart {
+            display: none;
+        }
+
+        /* Show text without d-none on desktop */
+        #cartBtn .button-text, #orderNowBtn .button-text {
+            display: inline-block !important;
+            margin-left: 0 !important;
+        }
+
+        /* Hide badge on desktop since count is in text */
+        #cartBtn .cart-count {
+            display: none;
+        }
     }
 </style>

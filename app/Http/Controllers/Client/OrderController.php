@@ -10,6 +10,8 @@ use App\Models\OrderItem;
 use App\Models\TimeSlot;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderConfirmation;
 
 class OrderController extends Controller
 {
@@ -185,6 +187,22 @@ class OrderController extends Controller
                     'item_8' => $item->item_8,
                     'price' => $item->total_price,
                     'quantity' => 1
+                ]);
+            }
+
+            // Send order confirmation email
+            try {
+                // Load the order with its items and time slot for the email
+                $orderWithRelations = Order::with(['items', 'timeSlot'])->find($order->id);
+                Mail::to($orderWithRelations->email)
+                    ->send(new OrderConfirmation($orderWithRelations));
+                Log::info('Order confirmation email sent', ['order_id' => $order->id, 'email' => $orderWithRelations->email]);
+            } catch (\Exception $e) {
+                // Log email sending error but don't fail the checkout
+                Log::error('Failed to send order confirmation email: ' . $e->getMessage(), [
+                    'order_id' => $order->id,
+                    'email' => $validated['email'],
+                    'error' => $e->getMessage()
                 ]);
             }
 

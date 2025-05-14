@@ -25,16 +25,31 @@
             </div>
         </div>
         <div class="card-body">
+            @php
+                $now = new DateTime('now', new DateTimeZone('Asia/Karachi'));
+                $currentTimestamp = $now->getTimestamp();
+                $today = $now->format('Y-m-d');
+                $isToday = ($date === $today);
+            @endphp
+
             @if(count($slots) > 0)
                 <div class="row">
                     @foreach($slots as $slot)
+                        @php
+                            $isPast = $isToday && $slot['timestamp'] < $currentTimestamp;
+                            $startTime = date('h:i A', $slot['timestamp']);
+                            $endTime = date('h:i A', $slot['timestamp'] + (30 * 60));
+                        @endphp
                         <div class="col-md-3 col-sm-4 col-6 mb-3">
-                            <div class="card">
+                            <div class="card {{ $isPast ? 'bg-light' : '' }}">
                                 <div class="card-body p-3 text-center">
-                                    <h5 class="card-title mb-0">{{ $slot['label'] }}</h5>
-                                    <p class="card-text small text-muted">
-                                        {{ date('h:i A', $slot['timestamp'] + (30 * 60)) }}
+                                    <h5 class="card-title mb-0 {{ $isPast ? 'text-muted' : '' }}">{{ $startTime }}</h5>
+                                    <p class="card-text small {{ $isPast ? 'text-muted' : '' }}">
+                                        {{ $endTime }}
                                     </p>
+                                    @if($isPast)
+                                        <span class="badge bg-secondary">Past</span>
+                                    @endif
                                 </div>
                             </div>
                         </div>

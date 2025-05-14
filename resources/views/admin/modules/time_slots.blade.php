@@ -38,13 +38,13 @@
                                 <h5 class="mb-0">Time Slot Configuration</h5>
                             </div>
                             <div class="card-body">
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" id="active" name="active" {{ isset($timeSlot) && $timeSlot->active ? 'checked' : '' }}>
                                         <label class="form-check-label" for="active">Enable Time Slots</label>
                                     </div>
                                     <small class="text-muted">When disabled, customers won't be asked to select a time slot</small>
-                                </div>
+                                </div> --}}
 
                                 <div class="mb-3">
                                     <label for="interval_minutes" class="form-label">Time Slot Interval (minutes)</label>

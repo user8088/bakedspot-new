@@ -62,7 +62,7 @@
                             <td>{{ $order->created_at->format('M d, Y') }}</td>
                             <td>
                                 @if($order->timeSlot)
-                                    {{ $order->timeSlot->start_time }} - {{ $order->timeSlot->end_time }}
+                                    {{ date('h:i A', strtotime($order->timeSlot->start_time)) }} - {{ date('h:i A', strtotime($order->timeSlot->end_time)) }}
                                 @else
                                     N/A
                                 @endif
@@ -132,8 +132,8 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-end mt-3">
-                {{ $orders->links() }}
+            <div class="d-flex justify-content-center mt-3">
+                {{ $orders->appends(request()->query())->links('vendor.pagination.bootstrap-5-simple') }}
             </div>
         </div>
     </div>
@@ -157,6 +157,22 @@
                             <option value="processing" @if(request('status') == 'processing') selected @endif>Processing</option>
                             <option value="completed" @if(request('status') == 'completed') selected @endif>Completed</option>
                             <option value="cancelled" @if(request('status') == 'cancelled') selected @endif>Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="payment_method" class="form-label">Payment Method</label>
+                        <select class="form-select" name="payment_method" id="payment_method">
+                            <option value="all" @if(request('payment_method') == 'all') selected @endif>All</option>
+                            <option value="cod" @if(request('payment_method') == 'cod') selected @endif>Cash on Delivery</option>
+                            <option value="pickup" @if(request('payment_method') == 'pickup') selected @endif>Payment on Pickup</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="payment_status" class="form-label">Payment Status</label>
+                        <select class="form-select" name="payment_status" id="payment_status">
+                            <option value="all" @if(request('payment_status') == 'all') selected @endif>All</option>
+                            <option value="1" @if(request('payment_status') == '1') selected @endif>Paid</option>
+                            <option value="0" @if(request('payment_status') == '0') selected @endif>Pending</option>
                         </select>
                     </div>
                     <div class="mb-3">

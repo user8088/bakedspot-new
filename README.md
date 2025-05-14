@@ -1,3 +1,29 @@
+# Bakedspot Order System
+
+## Features
+
+### Order Confirmation Emails
+The system now automatically sends order confirmation emails to customers when they place an order. The email is sent from team@bakedspot.pk and includes:
+- Order details (order number, date, status)
+- Customer information
+- Delivery or pickup details
+- Order summary with items and pricing
+
+#### Configuration
+Email settings can be configured in the `.env` file:
+```
+MAIL_MAILER=smtp  # Change to smtp for production
+MAIL_HOST=your-mail-server.com
+MAIL_PORT=587
+MAIL_USERNAME=your-username
+MAIL_PASSWORD=your-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="team@bakedspot.pk"
+MAIL_FROM_NAME="Bakedspot Team"
+```
+
+For local development, the `log` mailer is used by default, which writes emails to the log file instead of sending them.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

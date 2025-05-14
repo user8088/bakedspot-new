@@ -26,27 +26,41 @@
 
             <div class="alert alert-info">
                 <i class="fas fa-info-circle me-2"></i>
-                This is a preview of how time slots will appear to customers for the selected date. Time slots that are in the past or already booked will be disabled.
+                This is a preview of how time slots will appear to customers for the selected date. Time slots that are in the past will be disabled.
             </div>
 
             <div class="row mt-4">
+                @php
+                    $now = new DateTime('now', new DateTimeZone('Asia/Karachi'));
+                    $currentTime = $now->format('H:i');
+                    $today = $now->format('Y-m-d');
+                    $isToday = ($date === $today);
+                @endphp
+
                 @if(count($slots) > 0)
                     @foreach($slots as $slot)
+                        @php
+                            // Check if slot is in the past for today
+                            $isPast = $isToday && $slot['start_time'] < $currentTime;
+
+                            // Convert times to 12-hour format
+                            $startTime12h = date('h:i A', strtotime($slot['start_time']));
+                            $endTime12h = date('h:i A', strtotime($slot['end_time']));
+
+                            // Override the available status for past slots
+                            if ($isPast) {
+                                $slot['past'] = true;
+                            }
+                        @endphp
                         <div class="col-md-3 col-sm-6 mb-3">
-                            <div class="card h-100 {{ $slot['available'] ? '' : 'bg-light' }}">
+                            <div class="card h-100 {{ $isPast ? 'bg-light' : '' }}">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title">{{ $slot['start_time'] }} - {{ $slot['end_time'] }}</h5>
+                                    <h5 class="card-title">{{ $startTime12h }} - {{ $endTime12h }}</h5>
                                     <p class="card-text">
-                                        @if($slot['available'])
-                                            <span class="badge bg-success">Available</span>
+                                        @if($isPast)
+                                            <span class="badge bg-secondary">Past</span>
                                         @else
-                                            <span class="badge bg-secondary">
-                                                @if($slot['past'])
-                                                    Past
-                                                @else
-                                                    Booked
-                                                @endif
-                                            </span>
+                                            <span class="badge bg-success">Available</span>
                                         @endif
                                     </p>
                                 </div>
